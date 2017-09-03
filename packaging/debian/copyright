@@ -30,7 +30,8 @@ License: BSD-3-clause
 Files: src/version.h
        pcre/configure
        pcre/configure.bat
-Copyright: 1996-2010 iMatix Corporation <info@imatix.com>
+Copyright: 1996-2016 iMatix Corporation <info@imatix.com>
+           2016-2017 GSL Developers <zeromq-dev@lists.zeromq.org>
 License: BSD-3-clause
 
 Files: pcre/c
