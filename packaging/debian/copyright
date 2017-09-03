@@ -1,5 +1,5 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Source: https://github.com/imatix/gsl
+Source: https://github.com/zeromq/gsl
 Upstream-Name: gsl
 
 Files: *
