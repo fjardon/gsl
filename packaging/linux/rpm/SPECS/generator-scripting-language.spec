@@ -47,6 +47,7 @@ cd ..
 %doc doc/modules/*
 %doc README.md
 %doc README.txt
+%{_mandir}/man1/*
 %attr(755,root,root) %{_bindir}/gsl
 
 %package -n %{name}-examples
