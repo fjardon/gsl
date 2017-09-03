@@ -1,0 +1,61 @@
+.TH GSL "1" "September 2017" "gsl 4.1" "User Commands"
+.SH NAME
+gsl \- a code construction and generation tool
+.SH SYNOPSIS
+.B gsl
+.RB [\| \-<option>
+]
+.RB [\| \-<attr>[:<value>] \|]
+.IR [FILE]
+
+.B gsl -a
+.RB [\| \-<option>
+]
+.RB [\| \-<attr>[:<value>] \|]
+.IR [FILE]
+.IR [ARG]
+.SH DESCRIPTION
+GSL/4.1 is a code construction tool.  It will generate code in all
+languages and for all purposes, based on templates.
+.SH OPTIONS
+.TP
+\fB\-a\fR
+Pass arguments following \fI[FILE]\fR to GSL script
+.TP
+\fB\-q\fR
+suppress routine messages
+.TP
+\fB\-p\fR
+process files in parallel
+.TP
+\fB\-c:<MODE>[:\fIFILE\fB]
+set console mode (optionally capture output to file)
+
+(use capital case \fB\-C\fR:... to disable the echo)
+
+modes:
+.IP
+\fBp\fR \- print as requested
+.IP
+\fBd\fR \- prefix with date and time
+.IP
+\fBt\fR \- prefix with time only
+.IP
+\fBdbg\fR \- datetime, with full flush to disk
+.TP
+\fB\-s:<N>\fR
+set script cache size \- default is 1000000
+.TP
+\fB\-h\fR
+show command\-line summary
+.TP
+\fB\-v\fR
+show full version information
+.SH "SEE ALSO"
+The full documentation for \fBgsl\fR, including tutorials on how to create templates, is maintained as a MarkDown format README in:
+
+.B </usr/share/doc/generator-scripting-language/README.md>
+
+or online at:
+
+.B <https://github.com/zeromq/gsl/blob/master/README.md>

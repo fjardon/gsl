@@ -64,7 +64,13 @@ case "$BUILD_TYPE" in
 
 
     echo "=== What is the GSL binary linked against (note libpcre in particular)?"
-    ldd src/gsl || true
+    if [ $TRAVIS_OS_NAME == "linux" ]; then
+        ldd src/gsl || true
+    elif [ $TRAVIS_OS_NAME == "osx" ]; then
+        otool -L src/gsl || true
+    else
+        echo "Unsupported platform $TRAVIS_OS_NAME"
+    fi
 
     echo "=== Self-test GSL parser"
     (cd src && $CI_TIME make check) || exit $?

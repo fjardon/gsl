@@ -3,7 +3,11 @@ language: c
 
 cache: ccache
 
-sudo: true
+os:
+- linux
+- osx
+
+sudo: false
 
 # Set CI_TIME=true to enable build-step profiling in Travis
 # Set CI_TRACE=true to enable shell script tracing in Travis

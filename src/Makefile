@@ -2,6 +2,7 @@
 # Makefile for iMatix GSL/4.1
 #
 # Copyright (c) 1996-2010 iMatix Corporation
+#               2016-2017 GSL Developers
 # All rights reserved.
 #
 # This file is licensed under the BSD license as follows:
@@ -38,7 +39,7 @@ INSTALL = /usr/bin/install -c
 # Installation directories, good for Debian Packaging
 DESTDIR ?= /usr/local
 prefix = ${DESTDIR}
-mandir = ${prefix}/share/man/man8
+mandir = ${prefix}/share/man/man1
 bindir = ${prefix}/bin
 
 RM ?= rm -f
@@ -199,13 +200,22 @@ check: gsl$(EXE)
 install:
 	$(INSTALL) -m 755 -d "$(bindir)"
 	$(INSTALL) -m 755 gsl "$(bindir)"
+	$(INSTALL) -m 755 -d "$(mandir)"
+	$(INSTALL) -m 644 gsl.1 "$(mandir)"
 
 uninstall:
 	$(RM) "$(bindir)/gsl"
+	$(RM) "$(mandir)/gsl.1"
 	@if test -d "$(bindir)" ; then \
 	    if test `find "$(bindir)" | wc -l` -le 1 ; then \
 	        echo "$(RM) -r $(bindir)" >&2 ; \
 	        $(RM) -r "$(bindir)" ; \
+	    else true; fi ; \
+	else true ; fi
+	@if test -d "$(mandir)" ; then \
+	    if test `find "$(mandir)" | wc -l` -le 1 ; then \
+	        echo "$(RM) -r $(mandir)" >&2 ; \
+	        $(RM) -r "$(mandir)" ; \
 	    else true; fi ; \
 	else true ; fi
 

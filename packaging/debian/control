@@ -5,7 +5,7 @@ Maintainer: GSL Developers <zeromq-dev@lists.zeromq.org>
 Standards-Version: 4.1.0
 Build-Depends: debhelper (>= 9),
  libpcre3-dev,
-Homepage: https://github.com/imatix/gsl
+Homepage: https://github.com/zeromq/gsl
 
 Package: generator-scripting-language
 Architecture: any
@@ -32,7 +32,7 @@ Description: debugging symbols for generator-scripting-language
 Package: generator-scripting-language-examples
 Architecture: all
 Depends: ${misc:Depends},
- generator-scripting-language (= ${source:Version}),
+ generator-scripting-language (>= ${source:Version}),
 Description: Examples for the Generator Scripting Language code generator
  GSL/4.1 is a code construction tool.  It will generate code in all
  languages and for all purposes.  If this sounds too good to be true,
