@@ -308,9 +308,6 @@ static void process_the_switch (void)
         printf ("%s\n", PRODUCT);
         printf ("%s\n", BUILDMODEL);
         printf ("%s\n", COPYRIGHT);
-#if defined (CCOPTS)
-        printf ("Compiler: " CCOPTS "\n");
-#endif
         exit (0);
       }
     else
