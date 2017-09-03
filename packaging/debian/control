@@ -32,7 +32,7 @@ Description: debugging symbols for generator-scripting-language
 Package: generator-scripting-language-examples
 Architecture: all
 Depends: ${misc:Depends},
- generator-scripting-language (= ${source:Version}),
+ generator-scripting-language (>= ${source:Version}),
 Description: Examples for the Generator Scripting Language code generator
  GSL/4.1 is a code construction tool.  It will generate code in all
  languages and for all purposes.  If this sounds too good to be true,
