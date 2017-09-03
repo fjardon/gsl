@@ -1,7 +1,7 @@
 #
 # Makefile for iMatix GSL/4.1
 #
-# Copyright (c) 1996-2010 iMatix Corporation
+# Copyright (c) 1996-2016 iMatix Corporation
 #               2016-2017 GSL Developers
 # All rights reserved.
 #
