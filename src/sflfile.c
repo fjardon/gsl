@@ -1722,7 +1722,7 @@ get_new_filename (
     const char *filename)
 {
     char
-        suffix [8],
+        suffix [12],
         *new_name;
     int
         counter;
