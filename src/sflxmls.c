@@ -668,7 +668,7 @@ set_path_position (XML_STORE *store, char *path, Bool create_missing)
                 strcpy (store-> path, path);
           }
         else
-        if (end == '\0')
+        if (*end == '\0')
             strcpy (store-> path, path);
         else
         if (create_missing)            /* Create missing item if required    */
