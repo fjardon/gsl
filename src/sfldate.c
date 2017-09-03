@@ -992,7 +992,7 @@ timezone_string (void)
     return (timezone);
 #elif (defined (TIMEZONE))
     static char
-        formatted_string [10];          /*  -nnnn plus null                  */
+        formatted_string [12];          /*  -nnnn plus null                  */
     int
         minutes;                        /*  TIMEZONE is in seconds           */
 

@@ -135,7 +135,7 @@ static char *
 time_str (void)
 {
     static char
-        formatted_time [18];
+        formatted_time [64];
     time_t
         time_secs;
     struct tm
