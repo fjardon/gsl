@@ -19,7 +19,6 @@ env:
     - CI_CONFIG_QUIET=true
   matrix:
     - BUILD_TYPE=default
-    - BUILD_TYPE=with-pcre
 
 script:
 - ./ci_build.sh

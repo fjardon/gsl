@@ -39,18 +39,11 @@ all: gsl
 
 gsl: gsl-shared
 
-pcre/libpcre.a:
-	cd pcre && $(MAKE) libpcre.a
-
 gsl-shared:
 	cd src && $(MAKE) all && cp -f gsl $@
-
-gsl-static: pcre/libpcre.a
-	cd src && $(MAKE) CCLIBS="../pcre/libpcre.a" all && cp -f gsl $@
 
 check install uninstall:
 	cd src && $(MAKE) $@
 
 clean:
 	cd src && $(MAKE) $@
-	cd pcre && $(MAKE) $@

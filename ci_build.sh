@@ -28,7 +28,7 @@ case "$CI_TRACE" in
 esac
 
 case "$BUILD_TYPE" in
-"default"|"with-pcre")
+"default")
     mkdir tmp
     BUILD_PREFIX="$PWD/tmp"
 
@@ -37,22 +37,8 @@ case "$BUILD_TYPE" in
     export CCACHE_PATH CCACHE_DIR
     # ccache -s 2>/dev/null || true
 
-    if [ "$BUILD_TYPE" = with-pcre ]; then
-        [ -z "$CI_TIME" ] || echo "`date`: Starting build of bundled pcre..."
-        ( cd ./pcre && \
-          CCACHE_BASEDIR=${PWD} && \
-          export CCACHE_BASEDIR && \
-          $CI_TIME make -j4 && \
-          DESTDIR="${BUILD_PREFIX}" $CI_TIME make install \
-        ) || exit 1
-    fi
-
     [ -z "$CI_TIME" ] || echo "`date`: Starting build of gsl..."
         ( EXTRA_MAKE_OPTS=""
-          [ "$BUILD_TYPE" = with-pcre ] \
-            && { EXTRA_MAKE_OPTS=CCLIBS="../pcre/libpcre.a" && \
-                 echo "Using bundled PCRE libs as a static built-in"; } \
-            || echo "Using system-provided PCRE libs"
           cd ./src && \
           CCACHE_BASEDIR=${PWD} && \
           export CCACHE_BASEDIR && \

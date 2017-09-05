@@ -21,7 +21,7 @@
 <gxl script = "ggobjt.gsl" filename = "ggpcre" title = "GSL/regexp package" >
 
 <extra>
-#include "../pcre/pcre.h"
+#include <pcre.h>
 </extra>
 
 <class name = "regexp" title = "Regular Expression Functions" >
