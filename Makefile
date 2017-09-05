@@ -35,15 +35,5 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-all: gsl
-
-gsl: gsl-shared
-
-gsl-shared:
-	cd src && $(MAKE) all && cp -f gsl $@
-
-check install uninstall:
-	cd src && $(MAKE) $@
-
-clean:
+all check clean install uninstall:
 	cd src && $(MAKE) $@

@@ -1,4 +1,7 @@
+debhelper-*
+.debhelper/*
 files
 *.substvars
 generator-scripting-language-dbg/*
+generator-scripting-language-examples/*
 generator-scripting-language/*

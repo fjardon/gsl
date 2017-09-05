@@ -8,15 +8,7 @@ ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 endif
 
 %:
-	dh $@
+	dh $@ --parallel
 
 override_dh_strip:
 	dh_strip --dbg-package=generator-scripting-language-dbg
-
-override_dh_auto_build:
-	$(MAKE) -C src CFLAGS="$(CFLAGS)" CPPFLAGS="$(CPPFLAGS)" LDFLAGS="$(LDFLAGS)"
-
-override_dh_auto_clean:
-	test ! -d src || $(MAKE) -C src clean
-	dh_auto_clean
-
