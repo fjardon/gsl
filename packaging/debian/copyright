@@ -22,7 +22,9 @@ License: GPL-3+
  On Debian systems, the complete text of the GNU General
  Public License version 3 can be found in "/usr/share/common-licenses/GPL-3".
 
-Files: src/version.h
+Files: Makefile
+       scr/Makefile
+       src/version.h
 Copyright: 1996-2016 iMatix Corporation <info@imatix.com>
            2016-2017 GSL Developers <zeromq-dev@lists.zeromq.org>
 License: BSD-3-clause
