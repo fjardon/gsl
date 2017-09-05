@@ -51,7 +51,7 @@ CLASS_DESCRIPTOR
         regexp_functions, tblsize (regexp_functions) };
 
 
-#include "../pcre/pcre.h"
+#include <pcre.h>
 
 
 static int
