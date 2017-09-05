@@ -183,44 +183,5 @@ SRC_SOURCES = \
     smttst3.c \
     smtxlog.c
 
-PCRE_HEADERS = \
-    config.h \
-    pcre.h \
-    pcre_internal.h \
-    pcre_scanner.h \
-    pcrecpp.h \
-    pcreposix.h \
-    ucp.h \
-    ucpinternal.h
-
-PCRE_SOURCES = \
-    pcre_chartables.c \
-    pcre_compile.c \
-    pcre_config.c \
-    pcre_dfa_exec.c \
-    pcre_exec.c \
-    pcre_fullinfo.c \
-    pcre_get.c \
-    pcre_globals.c \
-    pcre_info.c \
-    pcre_maketables.c \
-    pcre_ord2utf8.c \
-    pcre_refcount.c \
-    pcre_study.c \
-    pcre_tables.c \
-    pcre_try_flipped.c \
-    pcre_ucp_searchfuncs.c \
-    pcre_valid_utf8.c \
-    pcre_version.c \
-    pcre_xclass.c \
-    pcreposix.c \
-    ucptable.c
-
 for(header, SRC_HEADERS): HEADERS += ../src/$${header}
 for(source, SRC_SOURCES): SOURCES += ../src/$${source}
-for(header, PCRE_HEADERS): HEADERS += ../pcre/$${header}
-for(source, PCRE_SOURCES): SOURCES += ../pcre/$${source}
-
-INCLUDEPATH += ../pcre
-
-OTHER_FILES += pcre/dftables.c
