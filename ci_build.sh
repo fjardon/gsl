@@ -42,12 +42,11 @@ case "$BUILD_TYPE" in
           cd ./src && \
           CCACHE_BASEDIR=${PWD} && \
           export CCACHE_BASEDIR && \
-          $CI_TIME make $EXTRA_MAKE_OPTS -j4 && \
+          $CI_TIME make $EXTRA_MAKE_OPTS -j4 test && \
           DESTDIR="${BUILD_PREFIX}" $CI_TIME make $EXTRA_MAKE_OPTS install \
         ) || exit 1
 
     [ -z "$CI_TIME" ] || echo "`date`: Builds completed without fatal errors!"
-
 
     echo "=== What is the GSL binary linked against (note libpcre in particular)?"
     if [ $TRAVIS_OS_NAME == "linux" ]; then
