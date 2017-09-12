@@ -567,7 +567,7 @@ string_search_replace (int argc, RESULT_NODE **argv, void *item, RESULT_NODE *re
     replace_location = strstr (strbuf_, search_);
     if (replace_location == NULL)
     {
-        result-> value. s    = strdup(strbuf_);
+        result-> value. s    = mem_strdup(strbuf_);
         result-> value. type = TYPE_STRING;
     }
     else
