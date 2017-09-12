@@ -14,6 +14,7 @@ echo "certify: should be 'Two hundred and twelve million': " + rs
 str = "A fool and his guilt are soon parted."
 echo str
 echo string.replace (str, "guilt|honey")
+echo string.search_replace (str, "money", "replacement")
 
 str = "A beautiful eye makes silence eloquent, a kind eye makes contradiction
 an assent, an enraged eye makes beauty deformed. This little member gives life
