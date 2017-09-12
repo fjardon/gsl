@@ -198,6 +198,7 @@ test: everything
 
 check: gsl$(EXE)
 	./gsl$(EXE) testall
+	./gsl$(EXE) teststr
 
 install:
 	$(INSTALL) -m 755 -d "$(bindir)"
