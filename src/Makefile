@@ -53,6 +53,8 @@ DBG =
 CC = ./c -q
 export CCLIBS = -lpcre
 
+CPPFLAGS ?= -I/usr/include/pcre
+
 # Reset the suffixes that will be considered to just our own list.
 #
 # Make programs use the .SUFFIXES psuedo rule for this
