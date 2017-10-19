@@ -1988,9 +1988,9 @@ Bool  get_accents         (void);
 char *get_units_name      (int units);
 char *get_tens_name       (int tens);
 char *get_day_name        (int day);
-char *get_day_abbrev      (int day, Bool upper);
+char *get_day_abbrev      (int day, Bool upper, char *dest);
 char *get_month_name      (int month);
-char *get_month_abbrev    (int month, Bool upper);
+char *get_month_abbrev    (int month, Bool upper, char *dest);
 char *timestamp_string    (char *buffer, const char *pattern);
 char *certify_the_number  (char *buffer, int buffer_size, long number,
                            char *language, int code_page);
