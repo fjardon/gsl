@@ -22,6 +22,9 @@ build/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# Jenkins temp dir
+src@tmp/
+
 *_i.c
 *_p.c
 *.ilk
