@@ -1,11 +1,5 @@
 generator-scripting-language (4.1.5) UNRELEASED; urgency=low
 
-  * Updated release under ZeroMQ community stewardship.
-
- -- ZeroMQ Community https://github.com/zeromq/gsl/  Wed, Sep 13 15:35:49 2017 +0200
-
-generator-scripting-language (4.1.4) UNRELEASED; urgency=low
-
   * Initial packaging.
 
- -- iMatix Corporation <info@imatix.com>  Sun, 21 Aug 2016 00:00:00 +0000
+ -- GSL Developers <zeromq-dev@lists.zeromq.org>  Sun, 21 Aug 2016 00:00:00 +0000
