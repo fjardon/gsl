@@ -9,7 +9,7 @@ License:	GPL v3+
 Group:		Libraries
 Source0:	http://download.zeromq.org/gsl-%{version}.tar.gz
 URL:		http://zeromq.org/
-BuildRequires:	pcre-devel >= 8
+BuildRequires:	pcre-devel
 Provides:	generator-scripting-language
 
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
