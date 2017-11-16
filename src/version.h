@@ -44,8 +44,8 @@
 #undef  COPYRIGHT
 #undef  BUILDDATE
 #undef  BUILDMODEL
-#define VERSION         "4.1.4"
-#define PRODUCT         "GSL/4.1.4"
+#define VERSION         "4.1.5"
+#define PRODUCT         "GSL/4.1.5"
 #define COPYRIGHT       "Copyright (c) 1996-2016 iMatix Corporation\n              GSL Developers 2016-2017"
 #define BUILDDATE       ""
 #define BUILDMODEL      "Built from http://github.com/zeromq/gsl.git master"
