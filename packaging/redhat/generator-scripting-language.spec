@@ -1,0 +1,1 @@
+../linux/rpm/SPECS/generator-scripting-language.spec
