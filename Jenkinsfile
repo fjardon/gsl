@@ -22,6 +22,18 @@ pipeline {
             defaultValue: true,
             description: 'If the deployment is done, should THIS job wait for it to complete and include its success or failure as the build result (true), or should it schedule the job and exit quickly to free up the executor (false)',
             name: 'DEPLOY_REPORT_RESULT')
+        booleanParam (
+            defaultValue: true,
+            description: 'Attempt a "make install" check in this run?',
+            name: 'DO_TEST_INSTALL')
+        string (
+            defaultValue: "`pwd`/tmp/_inst",
+            description: 'If attempting a "make install" check in this run, what DESTDIR to specify? (absolute path, defaults to "BUILD_DIR/tmp/_inst")',
+            name: 'USE_TEST_INSTALL_DESTDIR')
+        booleanParam (
+            defaultValue: true,
+            description: 'When using temporary subdirs in build/test workspaces, wipe them after successful builds?',
+            name: 'DO_CLEANUP_AFTER_BUILD')
     }
     triggers {
         pollSCM 'H/5 * * * *'
@@ -54,6 +66,20 @@ pipeline {
                 }
             }
         }
+        stage ('install') {
+            when { expression { return ( params.DO_TEST_INSTALL ) } }
+            steps {
+                timeout (time: 5, unit: 'MINUTES') {
+                    sh """CCACHE_BASEDIR="`pwd`" ; export CCACHE_BASEDIR; make DESTDIR="${params.USE_TEST_INSTALL_DESTDIR}" install"""
+                }
+                sh 'echo "Are GitIgnores good after make install? (should have no output below)"; git status -s || true'
+                script {
+                    if ( params.DO_CLEANUP_AFTER_BUILD ) {
+                        deleteDir()
+                    }
+                }
+            }
+        }
         stage ('deploy if appropriate') {
             steps {
                 script {
@@ -78,6 +104,12 @@ pipeline {
                         echo "Not deploying because deploy-job parameters are not set"
                     }
                 }
+            }
+        }
+        stage ('cleanup') {
+            when { expression { return ( params.DO_CLEANUP_AFTER_BUILD ) } }
+            steps {
+                deleteDir()
             }
         }
     }
