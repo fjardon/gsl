@@ -75,7 +75,9 @@ pipeline {
                 sh 'echo "Are GitIgnores good after make install? (should have no output below)"; git status -s || true'
                 script {
                     if ( params.DO_CLEANUP_AFTER_BUILD ) {
-                        deleteDir()
+                        dir("${params.USE_TEST_INSTALL_DESTDIR}") {
+                            deleteDir()
+                        }
                     }
                 }
             }
