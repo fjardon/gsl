@@ -1,4 +1,4 @@
-.set GIT=http://github.com/imatix/gsl
+.set GIT=http://github.com/zeromq/gsl
 
 # GSL/4.1 - a Universal Code Generator
 
@@ -36,7 +36,7 @@ Dependencies:
 
 To build from git on a UNIX-like box, and install into `/usr/local/bin`:
 
-    git clone git://github.com/imatix/gsl
+    git clone git://github.com/zeromq/gsl
     cd gsl/src
     make
     sudo make install
@@ -90,14 +90,14 @@ Download, Build and Install gcc:
 
 Finally build gsl:
 
-    git clone git://github.com/imatix/gsl
+    git clone git://github.com/zeromq/gsl
     cd gsl/src
     make
     make install
 
 ### This Document
 
-This document was written by Pieter Hintjens in October 2010 based on two 2005 articles on 'model oriented programming', and the GSL reference manual.  This text is originally at README.txt and is built using [gitdown](http://github.com/imatix/gitdown). The text was updated by Gyepi Sam in January 2013 to port documentation from earlier versions and to include more examples.
+This document was written by Pieter Hintjens in October 2010 based on two 2005 articles on 'model oriented programming', and the GSL reference manual.  This text is originally at README.txt and is built using [gitdown](http://github.com/zeromq/gitdown). The text was updated by Gyepi Sam in January 2013 to port documentation from earlier versions and to include more examples.
 
 ## Starting with GSL
 
