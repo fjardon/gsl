@@ -93,6 +93,7 @@
     || defined (__PPC64__) || defined (__powerpc64__) || defined (__ppc64__) \
     || defined (__s390x__) || (defined (__sparc__) && defined (__arch64__)) \
     || defined (__ia64) || defined (__itanium__) || defined (_M_IA64) \
+    || defined (__riscv64) || (defined (__riscv_xlen) && __riscv_xlen == 64) \
     || (defined (__mips__) && defined (_MIPSEL) && _MIPS_SIM == _ABI64))
 #    define __IS_64BIT__                /*  May have 64-bit OS/compiler      */
 #else
