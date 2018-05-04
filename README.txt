@@ -95,6 +95,26 @@ Finally build gsl:
     make
     make install
 
+Finally build gsl:
+
+    git clone git://github.com/zeromq/gsl
+    cd gsl/src
+    make
+    make install
+
+#### Building on MacOS 
+
+The modern way of building on MacOS is to make sure you have pcre installed and use brew.
+
+    brew install pcre
+
+And then build gsl as above:
+
+    git clone git://github.com/zeromq/gsl
+    cd gsl/src
+    make
+    sudo make install
+
 ### This Document
 
 This document was written by Pieter Hintjens in October 2010 based on two 2005 articles on 'model oriented programming', and the GSL reference manual.  This text is originally at README.txt and is built using [gitdown](http://github.com/zeromq/gitdown). The text was updated by Gyepi Sam in January 2013 to port documentation from earlier versions and to include more examples.
