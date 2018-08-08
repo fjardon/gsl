@@ -201,6 +201,12 @@ test: everything
 check: gsl$(EXE)
 	./gsl$(EXE) testall
 	./gsl$(EXE) teststr
+	if ./gsl$(EXE) testabort ; then \
+	    echo "=== The gsl abort() returned a zero exit code, this is useless, FAIL"; \
+	    false ; \
+	else \
+	    echo "=== The gsl abort() returned non-zero exit code as expected, OK"; \
+	fi
 
 install:
 	$(INSTALL) -m 755 -d "$(bindir)"

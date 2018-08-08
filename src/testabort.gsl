@@ -1,0 +1,2 @@
+abort "Error message goes here"
+echo "Info message, you should not see this one"

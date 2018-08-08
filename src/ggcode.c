@@ -5390,6 +5390,9 @@ MODULE invoke_abort_handler (THREAD *thread)
     tcb = thread-> tcb;                 /*  Point to thread's context        */
     if (abort_fct)
         (abort_fct) ();                 /*  Call abort handler if defined    */
+    else
+        exit(EXIT_FAILURE);             /*  An abort is not an echo, so report
+                                         *  to caller that there is an issue */
 }
 
 
