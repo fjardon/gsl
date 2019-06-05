@@ -1205,11 +1205,15 @@ get_curdir (void)
 {
     char
         *curdir;                        /*  String we get from the OS        */
+    int
+        errc;                           /*  Error code from OS syscalls      */
 
     curdir = mem_alloc (PATH_MAX + 1);
 
 #if (defined (__UNIX__) || defined (__OS2__))
-    ASSERT (getcwd (curdir, PATH_MAX));
+
+    errc = getcwd (curdir, PATH_MAX);
+    ASSERT (errc);
 
 #elif (defined (__VMS__))
     getcwd (curdir, PATH_MAX, 0);
