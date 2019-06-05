@@ -139,14 +139,14 @@
 #    define __IS_32BIT__                /*  Else assume 32-bit OS/compiler   */
 #endif
 
-#if (defined WIN32 || defined _WIN32)
+#if (defined WIN32 || defined _WIN32) && !defined (__CYGWIN__)
 #   undef __WINDOWS__
 #   define __WINDOWS__
 #   undef __MSDOS__
 #   define __MSDOS__
 #endif
 
-#if (defined WINDOWS || defined _WINDOWS || defined __WINDOWS__)
+#if (defined WINDOWS || defined _WINDOWS || defined __WINDOWS__) && !defined (CYGWIN)
 #   undef __WINDOWS__
 #   define __WINDOWS__
 #   undef __MSDOS__
@@ -305,7 +305,7 @@
 #   include <sys\stat.h>
 #   include <sys\utime.h>
 #   include <share.h>
-#   if _MSC_VER == 1500
+#   if _MSC_VER >= 1500
 #       ifndef _CRT_SECURE_NO_DEPRECATE
 #           define _CRT_SECURE_NO_DEPRECATE   1
 #       endif
@@ -521,6 +521,22 @@ typedef struct {                        /*  Variable-size descriptor         */
     typedef __int64 int64_t;
 #elif (defined (__VMS__))
     typedef __int64 int64_t;
+#endif
+
+/*  A number of CRT functions deprecated on Windows                          */
+#if (defined (__WINDOWS__))
+#   undef close
+#   define close(a) _close(a)
+#   undef lseek
+#   define lseek(a, b, c) _lseek(a, b, c)
+#   undef strdup
+#   define strdup(a) _strdup(a)
+#   undef open
+#   define open(a, b, c) _open(a, b, c)
+#   undef read
+#   define read(a, b, c) _read(a, b, c)
+#   undef write
+#   define write(a, b, c) _write(a, b, c)
 #endif
 
 /*  On most systems, 'timezone' is an external long variable.  On a few, it
@@ -1596,11 +1612,11 @@ int    exdr_read    (const byte *buffer, const char *format, ...);
 #   define FOPEN_APPEND_TEXT    "a"
 #   define FOPEN_APPEND_BINARY  "a"
 #elif (defined (__UNIX__))
-#   define FOPEN_READ_TEXT      "rt"    /*  Under UNIX we can be explict     */
+#   define FOPEN_READ_TEXT      "r"    /*  Under UNIX we can be explict     */
 #   define FOPEN_READ_BINARY    "rb"    /*    and use 't' or 'b' in fopen    */
-#   define FOPEN_WRITE_TEXT     "wt"
+#   define FOPEN_WRITE_TEXT     "w"
 #   define FOPEN_WRITE_BINARY   "wb"
-#   define FOPEN_APPEND_TEXT    "at"
+#   define FOPEN_APPEND_TEXT    "a"
 #   define FOPEN_APPEND_BINARY  "ab"
 #elif (defined (__OS2__))
 #   define FOPEN_READ_TEXT      "rt"    /*  Under OS/2 we can be explict     */
@@ -3092,7 +3108,7 @@ typedef struct
 
 #elif (defined (WIN32))                 /*  Win32:                           */
     HANDLE  _dir_handle;                /*    a directory handle             */
-    WIN32_FIND_DATA _dir_entry;         /*    and a file descriptor          */
+    WIN32_FIND_DATAA _dir_entry;        /*    and a file descriptor          */
 
 #elif (defined (_MSC_VER))              /*  MSC Win16                        */
     long    _dir_handle;                /*    a directory handle             */

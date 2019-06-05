@@ -100,14 +100,14 @@
 #    define __IS_32BIT__                /*  Else assume 32-bit OS/compiler   */
 #endif
 
-#if (defined WIN32 || defined _WIN32)
+#if (defined WIN32 || defined _WIN32) && !defined (__CYGWIN__)
 #   undef __WINDOWS__
 #   define __WINDOWS__
 #   undef __MSDOS__
 #   define __MSDOS__
 #endif
 
-#if (defined WINDOWS || defined _WINDOWS || defined __WINDOWS__)
+#if (defined WINDOWS || defined _WINDOWS || defined __WINDOWS__) && !defined (CYGWIN)
 #   undef __WINDOWS__
 #   define __WINDOWS__
 #   undef __MSDOS__
