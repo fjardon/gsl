@@ -465,6 +465,8 @@ bits_fput (FILE *file,
 {
     int
         block_nbr;                      /*  Bitstring block number           */
+    int
+        errc;                           /*  Error code for libc calls        */
     word
         comp_size;                      /*  Size of compressed block         */
     BITBLOCK
@@ -474,21 +476,27 @@ bits_fput (FILE *file,
     ASSERT (file);
 
     /*  Write bitstring header to file                                       */
-    ASSERT (fwrite (&bits-> block_count, sizeof (bits-> block_count), 1, file) == 1);
-    ASSERT (fwrite (&bits-> free_list,   sizeof (bits-> free_list),   1, file) == 1);
+    errc = fwrite (&bits-> block_count, sizeof (bits-> block_count), 1, file);
+    ASSERT (errc == 1);
+    errc = fwrite (&bits-> free_list,   sizeof (bits-> free_list),   1, file);
+    ASSERT (errc == 1);
 
     /*  Write bitstring blocks to file                                       */
     for (block_nbr = 0; block_nbr < bits-> block_count; block_nbr++)
       {
         block_ptr = bits-> block [block_nbr];
-        ASSERT (fwrite (&block_ptr-> right, sizeof (block_ptr-> right), 1, file) == 1);
-        ASSERT (fwrite (&block_ptr-> size,  sizeof (block_ptr-> size),  1, file) == 1);
+        errc = fwrite (&block_ptr-> right, sizeof (block_ptr-> right), 1, file);
+        ASSERT (errc == 1);
+        errc = fwrite (&block_ptr-> size,  sizeof (block_ptr-> size),  1, file);
+        ASSERT (errc == 1);
 
         comp_size = compress_block (block_ptr-> block.data,
                                     compressed, (word)BIT_DATASIZE);
 
-        ASSERT (fwrite (&comp_size, sizeof (comp_size), 1, file) == 1);
-        ASSERT (fwrite (compressed,         comp_size,  1, file) == 1);
+        errc = fwrite (&comp_size, sizeof (comp_size), 1, file);
+        ASSERT (errc == 1);
+        errc = fwrite (compressed,         comp_size,  1, file);
+        ASSERT (errc == 1);
       }
     return 0;
 }
@@ -507,6 +515,8 @@ bits_fget (FILE *file)
 {
     int
         block_nbr;                      /*  Bitstring block number           */
+    int
+        errc;                           /*  Return value libc calls          */
     word
         comp_size = 0;                  /*  Size of compressed block         */
     BITBLOCK
@@ -519,8 +529,10 @@ bits_fget (FILE *file)
     bits = bits_create ();              /*  Create a new, empty bitmap       */
 
     /*  Read bitstring header from file                                      */
-    ASSERT (fread (&bits-> block_count, sizeof (bits-> block_count), 1, file) == 1);
-    ASSERT (fread (&bits-> free_list,   sizeof (bits-> free_list),   1, file) == 1);
+    errc = fread (&bits-> block_count, sizeof (bits-> block_count), 1, file);
+    ASSERT (errc == 1);
+    errc = fread (&bits-> free_list,   sizeof (bits-> free_list),   1, file);
+    ASSERT (errc == 1);
 
     /*  Read bitstring blocks from file                                      */
     for (block_nbr = 0; block_nbr < bits-> block_count; block_nbr++)
@@ -532,10 +544,14 @@ bits_fget (FILE *file)
             return (NULL);
           }
         block_ptr        = bits-> block [block_nbr];
-        ASSERT (fread (&block_ptr-> right, sizeof (block_ptr-> right), 1, file) == 1);
-        ASSERT (fread (&block_ptr-> size,  sizeof (block_ptr-> size),  1, file) == 1);
-        ASSERT (fread (&comp_size,         sizeof (comp_size),         1, file) == 1);
-        ASSERT (fread (compressed,         comp_size,                  1, file) == 1);
+        errc = fread (&block_ptr-> right, sizeof (block_ptr-> right), 1, file);
+        ASSERT (errc == 1);
+        errc = fread (&block_ptr-> size,  sizeof (block_ptr-> size),  1, file);
+        ASSERT (errc == 1);
+        errc = fread (&comp_size,         sizeof (comp_size),         1, file);
+        ASSERT (errc == 1);
+        errc = fread (compressed,         comp_size,                  1, file);
+        ASSERT (errc == 1);
         expand_block (compressed, block_ptr-> block.data, comp_size);
       }
     return (bits);
