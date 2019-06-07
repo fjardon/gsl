@@ -1,6 +1,7 @@
+#!/usr/bin/env sh
 #*===========================================================================*
 #*                                                                           *
-#*  Makefile - Makefile for integration with the project's build script      *
+#*  vim-project - Shell script to launch vim with vim-project                *
 #*                                                                           *
 #*  Copyright (c) 2019 Frederic Jardon  <frederic.jardon@gmail.com>          *
 #*                                                                           *
@@ -25,14 +26,10 @@
 #*  not, see <http://www.gnu.org/licenses/>.                                 *
 #*  --------------------------------------------------------------           *
 #*===========================================================================*
-all :
-	../build-aux/build
 
-check :
-	../build-aux/build check
+VIMED="${VIMED:-vim}"
 
-check-code-coverage :
-	../build-aux/build check-code-coverage
+GSL_PROJECT=$(cd $(dirname "$0") ; pwd -P)
+export GSL_PROJECT
+${VIMED} "+Project ${GSL_PROJECT}/.vim-project"
 
-destroy :
-	../build-aux/build destroy

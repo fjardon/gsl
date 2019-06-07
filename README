@@ -1,0 +1,35 @@
+INSTALL
+-------
+
+The install procedure uses 'autotool' build system. This means that for most
+unixes it should be as straightforward as:
+
+    mkdir ../gsl-build
+    cd ../gsl-build
+    ../gsl/configure --prefix=$HOME/.local
+    make
+    make check
+    make install
+
+This procedure should work even when using the Windows(tm) operating system, if
+you are also using a POSIX layer like Cygwin or MinGW and gcc.
+
+In case you want to use Microsoft cl.exe compiler, the configure step should be
+tweaked a bit. After loading the environment needed to have the Microsoft cl.exe
+compiler and tools in PATH, configure the build as follow:
+
+    CC='cl' CFLAGS='/MD' \
+    CXX='../gsl/build-aux/compile cl' CXXFLAGS='/EHsc /MD' \
+    LD='link' LDFLAGS='/DEBUG' \
+    NM='dumpbin /HEADERS /SYMBOLS' \
+    ../gsl/configure \
+    --host 'x86_64-pc-mingw32' \
+    --prefix="$HOME/.local/w64"
+
+Then run the usual commands:
+
+    make
+    make check
+    make install
+
+

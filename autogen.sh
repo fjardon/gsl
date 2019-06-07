@@ -1,6 +1,7 @@
+#!/usr/bin/env sh
 #*===========================================================================*
 #*                                                                           *
-#*  Makefile - Makefile for integration with the project's build script      *
+#*  autogen.sh - Autoconf bootstrap script for the project                   *
 #*                                                                           *
 #*  Copyright (c) 2019 Frederic Jardon  <frederic.jardon@gmail.com>          *
 #*                                                                           *
@@ -25,14 +26,62 @@
 #*  not, see <http://www.gnu.org/licenses/>.                                 *
 #*  --------------------------------------------------------------           *
 #*===========================================================================*
-all :
-	../build-aux/build
 
-check :
-	../build-aux/build check
+# This script will install the autotools infrastructure in this project
+# This is solely needed after a fresh checkout of the project.
+# Usually tarball distribution includes the autotool files and need not run
+# this script.
+#
+# Running the script with the --gnulib flag will run just enough script to
+# import the gnulib modules
+#
+# Running the script without arguments will bootstrap the gnulib and autotools
+# infrastructure
 
-check-code-coverage :
-	../build-aux/build check-code-coverage
+set -e
 
-destroy :
-	../build-aux/build destroy
+# gnulib-tool --import calls should appear first
+
+# References:
+# - https://www.gnu.org/software/gnulib/manual/html_node/Initial-import.html
+# - https://www.gnu.org/software/gnulib/manual/html_node/Modified-imports.html
+#
+# Example `gnulib-tool` invokation
+#
+# gnulib-tool --import posix_spawn
+# gnulib-tool --import pipe
+
+
+# Sanity check: we should run inside the source directory
+SRCDIR=`dirname "$0"`
+cd "${SRCDIR}"
+
+# Sanity check: we should be executable
+[ -x "$0" ] || chmod a+x "$0"
+
+# Sanity check: when running autotools there should be a lib/Makefile.am file
+# in case it is not present (after a fresh git checkout) create an empty one.
+#
+# Normally gnulib-import tool will create one if we depend on at least a single
+# gnulib module. But in case we do not use gnulib, the file will not be created.
+[ -e ./lib/Makefile.am ] || touch ./lib/Makefile.am
+
+# Sanity check: the scripts in build-aux/ should be executable. This is not
+# always the case after a fresh git checkout.
+[ -x ./vim-project            ] || chmod a+x ./vim-project
+[ -x ./build-aux/build        ] || chmod a+x ./build-aux/build
+[ -x ./build-aux/travis-setup ] || chmod a+x ./build-aux/travis-setup
+
+# Handle the nominal case when doing a full autotool setup
+if [ "$1" != "--gnulib" ]
+then
+    aclocal
+    autoreconf -i
+    automake --add-missing
+    autoconf
+else
+    # Handle the specific case of updating only gnulib
+    autoreconf
+    automake
+fi
+

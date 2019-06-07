@@ -1,0 +1,46 @@
+Authors of gsl
+--------------
+
+Frederic JARDON:
+  entire files
+       -> autoconf/automake infrastructure
+       -> build-aux/build
+       -> all vim related files
+
+Previous version on zeromq github (in alphabetical order):
+    Aaron Sokoloski
+    Alexander Rössler
+    Constantin Rack
+    Dominique Crétel
+    Doron Somech
+    Eric Voskuil
+    evoskuil
+    Garrett Bluma
+    Godefroid Chapelle
+    Gran Ville Lintao
+    Gyepi Sam
+    Jim Klimov
+    Johannes Frittum
+    Jonathan Schultz
+    jschultz
+    Kevin Sapper
+    Kio Smallwood
+    Kuba Ober
+    Luca Boccassi
+    Lucas Betschart
+    Martin Vala
+    Matt Griswold
+    Min(Dongmin Yu)
+    nothingismagick
+    Osiris
+    Patrik Wenger
+    Pieter Hintjens (original project author)
+    Serge Aleynikov
+    Shon Love
+    Simon Janes
+    Stephen Wolf
+    suntong001
+    thbourlove
+    Tom Whittock
+    Toyam Cox
+

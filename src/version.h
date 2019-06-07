@@ -44,11 +44,15 @@
 #undef  COPYRIGHT
 #undef  BUILDDATE
 #undef  BUILDMODEL
-#define VERSION         "4.1.5"
-#define PRODUCT         "GSL/4.1.5"
-#define COPYRIGHT       "Copyright (c) 1996-2016 iMatix Corporation\n              GSL Developers 2016-2017"
+#define VERSION         "4.1.6"
+#define PRODUCT         ("GSL/" VERSION)
+#define COPYRIGHT       (\
+                        "Copyright (c) 1996-2016 iMatix Corporation\n" \
+                        "                        2016-2017 GSL Developers\n" \
+                        "                        2019      Frederic Jardon" \
+                        )
 #define BUILDDATE       ""
-#define BUILDMODEL      "Built from http://github.com/zeromq/gsl.git master"
+#define BUILDMODEL      "Built from http://github.com/fjardon/gsl.git master"
 #if defined (VERSION_EMBED)
 /*  Embed the version information in the resulting binary   */
 char *gsl_version_start = "VeRsIoNsTaRt:gsl";

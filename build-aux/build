@@ -1,6 +1,7 @@
+#!/usr/bin/env bash
 #*===========================================================================*
 #*                                                                           *
-#*  Makefile - Makefile for integration with the project's build script      *
+#*  build - shell script for integration with vim                            *
 #*                                                                           *
 #*  Copyright (c) 2019 Frederic Jardon  <frederic.jardon@gmail.com>          *
 #*                                                                           *
@@ -25,14 +26,54 @@
 #*  not, see <http://www.gnu.org/licenses/>.                                 *
 #*  --------------------------------------------------------------           *
 #*===========================================================================*
-all :
-	../build-aux/build
 
-check :
-	../build-aux/build check
+# Abort on any error
+set -e
 
-check-code-coverage :
-	../build-aux/build check-code-coverage
+# Check if not called from inside VIM using project plugin
+if [ -z "${GSL_PROJECT}" ]; then
+    GSL_PROJECT=$(cd $(dirname $(dirname "$0")) ; pwd -P)
+fi
 
-destroy :
-	../build-aux/build destroy
+# Configuration variables
+BUILD_DIR="${GSL_PROJECT}-build"
+
+# Handle option if any
+if [ "$1" == "destroy" ]; then
+    echo "Removing old build directory ..."
+    rm -rf "${BUILD_DIR}"
+    exit 0
+fi
+
+# Create the build directory
+mkdir -p "${BUILD_DIR}"
+cd "${BUILD_DIR}"
+
+# Initial configuration of sources if needed
+if [ ! -e "${BUILD_DIR}/config.status" ]; then
+    echo "Configuring ..."
+    ${GSL_PROJECT}/configure --prefix=${HOME}/.local --enable-code-coverage
+fi
+
+ARGNO=0
+if [ -n "$1" ]; then
+    MAKE[${ARGNO}]="$1"
+    ARGNO=$(expr ${ARGNO} + 1)
+else
+    MAKE[${ARGNO}]="all"
+    ARGNO=$(expr ${ARGNO} + 1)
+fi
+
+MAKE[${ARGNO}]='CFLAGS=-g -O0 -Wall'
+ARGNO=$(expr ${ARGNO} + 1)
+
+# Platform specific tweaks
+if [[ $(uname -s) == CYGWIN* ]]; then
+    MAKE[${ARGNO}]="LDFLAGS=${LDFLAGS}${LDFLAGS+ }-no-undefined"
+    ARGNO=$(expr ${ARGNO} + 1)
+fi
+
+# Make
+make "${MAKE[@]}"
+
+

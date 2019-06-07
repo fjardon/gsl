@@ -1,0 +1,26 @@
+-------------------------------------------------------------------------------
+This file is used by configure.ac to find the directory containing the source
+code (AC_CONFIG_SRCDIR directive). Removing this file will prevent the build.
+-------------------------------------------------------------------------------
+
+This directory contains the actual source code that gets compiled: 
+- Every library should have its own subdirectory. 
+- Executables should get their own directory as well. 
+
+If each executable corresponds only to one or two files then it is sensible to 
+put them all under the same directory. 
+
+If your executables need more source files, or they can be separated in distinct
+classes of functionalities you may like to regroup them under multiple 
+directories. Feel free to use your judgment on how to do this best. 
+
+It is easiest to place the library test suites on the same directory with the 
+library source code. If that does not sit well with you however, you should put
+the test suite for each library in subdirectories under that library's 
+directory. It is a massively bad idea to put the test suites for different 
+libraries under the same directory. 
+
+References:
+-----------
+http://autotoolset.sourceforge.net/tutorial.html#Organizing-your-project-in-subdirectories
+

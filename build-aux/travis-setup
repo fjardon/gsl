@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+#*===========================================================================*
+#*                                                                           *
+#*  travis-setup - shell script for integration with travis-ci               *
+#*                                                                           *
+#*  Copyright (c) 2019 Frederic Jardon  <frederic.jardon@gmail.com>          *
+#*                                                                           *
+#*  ------------------ GPL Licensed Source Code ------------------           *
+#*  Frederic Jardon makes this software available under the GNU              *
+#*  General Public License (GPL) license for open source projects.           *
+#*  For details of the GPL license please see www.gnu.org or read            *
+#*  the file license.gpl provided in this package.                           *
+#*                                                                           *
+#*  This program is free software; you can redistribute it and/or            *
+#*  modify it under the terms of the GNU General Public License as           *
+#*  published by the Free Software Foundation; either version 3 of           *
+#*  the License, or (at your option) any later version.                      *
+#*                                                                           *
+#*  This program is distributed in the hope that it will be useful,          *
+#*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+#*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+#*  GNU General Public License for more details.                             *
+#*                                                                           *
+#*  You should have received a copy of the GNU General Public                *
+#*  License along with this program in the file 'license.gpl'; if            *
+#*  not, see <http://www.gnu.org/licenses/>.                                 *
+#*  --------------------------------------------------------------           *
+#*===========================================================================*
+
+# =============================================================================
+# Exit on any errors
+#
+set -e
+function echoerr() { echo "$@" 1>&2; }
+# =============================================================================
+
+# =============================================================================
+# run as root only
+if [ $EUID -ne 0 ] ; then
+    echoerr "This script need root access to run"
+    exit 1
+fi
+# =============================================================================
+
+# =============================================================================
+# Update apt-get repositories to get latest packages
+add-apt-repository ppa:ubuntu-toolchain-r/test -y
+add-apt-repository ppa:dns/gnu -y
+apt-get update -q
+# =============================================================================
+
+
+# =============================================================================
+# Install autotools as the repository is *not* a distribution and we must make
+# it a distribution before running ./configure
+#
+apt-get install -y autotools-dev
+apt-get install -y automake
+apt-get install -y autoconf
+apt-get install -y libtool
+apt-get install -y pkg-config
+
+# On some systems the default automake package is too old. We need to install
+# a recente automake
+AM_VERSION="1.14"
+AC_VERSION="2.69"
+ac_version=$(autoconf --version 2> /dev/null | head -n 1 | awk '{print $(NF)}')
+am_version=$(automake --version 2> /dev/null | head -n 1 | awk '{print $(NF)}')
+if [[ "${ac_version}" < "${AC_VERSION}" ]]; then
+    echo "Installing autoconf-${AC_VERSION}"
+    apt-get install -y wget
+    wget ftp://ftp.gnu.org/gnu/autoconf/autoconf-${AC_VERSION}.tar.gz \
+        &> /dev/null
+    if [ ! -f "autoconf-${AC_VERSION}.tar.gz" ]; then
+        echoerr "Cannot fetch autoconf ${AC_VERSION} from GNU ftp"
+        exit 1
+    fi
+    tar -xzf "autoconf-${AC_VERSION}.tar.gz"
+    cd "autoconf-${AC_VERSION}"
+    ./configure
+    make && make install
+    echo "Automake ${AC_VERSION} installed"
+fi
+if [[ "${am_version}" < "${AM_VERSION}" ]]; then
+    echo "Installing automake-${AM_VERSION}"
+    apt-get install -y wget
+    wget ftp://ftp.gnu.org/gnu/automake/automake-${AM_VERSION}.tar.gz \
+        &> /dev/null
+    if [ ! -f "automake-${AM_VERSION}.tar.gz" ]; then
+        echoerr "Cannot fetch automake ${AM_VERSION} from GNU ftp"
+        exit 1
+    fi
+    tar -xzf "automake-${AM_VERSION}.tar.gz"
+    cd "automake-${AM_VERSION}"
+    ./configure
+    make && make install
+    echo "Automake ${AM_VERSION} installed"
+fi
+# =============================================================================
+
+apt-get install -y libxml2-dev
+apt-get install -y gcc-4.9 g++-4.9
+update-alternatives \
+    --install /usr/bin/gcc gcc \
+    /usr/bin/gcc-4.9 60 \
+    --slave /usr/bin/g++ g++ \
+    /usr/bin/g++-4.9
+
