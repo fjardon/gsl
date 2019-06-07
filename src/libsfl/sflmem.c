@@ -641,8 +641,8 @@ mem_checkall_ (
     while (ptr != (MEMHDR *) &del_list.memhdr)
       {
         client_ptr = HDR_2_CLIENT (ptr);
-        for (c = 0; c < ptr-> size; c++)
-            ASSERT (* (byte *) client_ptr++ == 0);
+        for (c = 0; c < ptr-> size; c++, client_ptr++)
+            ASSERT (* (byte *) client_ptr == 0);
 
         ptr = ptr-> next;
       }
