@@ -36,6 +36,7 @@
 #include "tap.h"
 
 int main(int argc, char* argv[]) {
+    tap_comment("line with\nsecond line\nthird line");
     tap_ok(1, "gsl-check runs");
     tap_done_testing();
     return 0;
