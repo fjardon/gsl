@@ -43,6 +43,7 @@ TEST_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
                   $(top_srcdir)/build-aux/tap-driver.sh
 
 TESTS = src/gsl/gsl-check \
+		src/libsfl/sflbits-check \
 		src/libsfl/sfldir-check \
 		src/libsfl/sflfile-check \
 		# end-of-tests
@@ -141,6 +142,12 @@ src_gsl_gsl_check_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
 src_gsl_gsl_check_CFLAGS   = $(CODE_COVERAGE_CFLAGS) $(PCRE_CFLAGS)
 src_gsl_gsl_check_LDADD    = src/gsl/libgsl.la src/libtap/libtap.la \
                              $(CODE_COVERAGE_LIBS) $(PCRE_LIBS)
+
+# sflbits-check: a private test program
+src_libsfl_sflbits_check_SOURCES  = src/libsfl/sflbits-check.c
+src_libsfl_sflbits_check_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+src_libsfl_sflbits_check_CFLAGS   = $(CODE_COVERAGE_CFLAGS) $(PCRE_CFLAGS)
+src_libsfl_sflbits_check_LDADD    = src/libsfl/libsfl.la src/libtap/libtap.la $(CODE_COVERAGE_LIBS) $(PCRE_LIBS)
 
 # sfldir-check: a private test program
 src_libsfl_sfldir_check_SOURCES  = src/libsfl/sfldir-check.c

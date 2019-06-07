@@ -154,6 +154,7 @@ gsl="$GSL_PROJECT" CD="." in="build-aux/in.vim" out="build-aux/out.vim" {
   libsfl="libsfl" {
    Makefile
    sflbits.c
+   sflbits-check.c
    sflcomp.c
    sflcons.c
    sflconv.c

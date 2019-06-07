@@ -45,7 +45,7 @@ void check_FOPEN_WRITE_TEXT() {
 
     // TODO: check the file is truncated ...
 
-    tap_comment("test group: %s", __FUNCTION__);
+    tap_comment("test group: %s", __func__);
     tap_comment("----------");
 
     f = fopen("tmp.out", FOPEN_WRITE_TEXT);

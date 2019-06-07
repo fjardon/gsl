@@ -1,6 +1,6 @@
 /*===========================================================================*
  *                                                                           *
- *  sfldir-check.c - Unit tests for sfldir API                               *
+ *  sflbits-check.c - Unit tests for sflbits API                             *
  *                                                                           *
  *  Copyright (c) 2019 Frederic Jardon <frederic.jardon@gmail.com>           *
  *                                                                           *
@@ -35,41 +35,94 @@
 #include "sfl.h"
 #include "tap.h"
 
+static long const dead_beef = 0xdeadbeefdeadbeefl;
+unsigned char const expected_out[] = {
+  0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf4, 0x01, 0x00, 0x00,
+  0x08, 0x00, 0x40, 0x40, 0x00, 0x01, 0x00, 0x01, 0xe3, 0x00, 0x00, 0x00,
+  0x0c, 0x00, 0x00, 0x00, 0x11, 0x00, 0x40, 0x04, 0x40, 0x0f, 0xef, 0xbe,
+  0xad, 0xde, 0x00, 0x41, 0x80, 0xf8, 0x1f, 0x00, 0x01, 0xd8, 0x00
+};
+unsigned int const expected_out_len = 47;
 
-void check_get_curdir() {
-    char const
-        *dead_beef = "dead-beef";
-    char
-        *dir, *p, *pw, *end;
+void
+check_bits_fput() {
+    BITS
+        *bits;
+    FILE
+        *f;
+    long
+        f_pos;
     int
-        dead_beef_len;
+        i;
+    char
+        buffer[expected_out_len];
 
     tap_comment("test group: %s", __func__);
     tap_comment("----------");
 
-    dead_beef_len = strlen(dead_beef);
+    /* create a file containing a bit string */
+    bits = bits_create();
+    for(i = 0; i<8*sizeof(long); ++i)
+        if(dead_beef & (1 << i))
+            bits_set(bits, i);
+    f = fopen("check-bits.out", "wb");
+    bits_fput(f, bits);
+    f_pos = ftell(f);
+    fclose(f);
+    bits_destroy(bits);
 
-    /* taint some memory to observe uninitialized return */
-    p = mem_alloc(PATH_MAX*10);
-    pw  = p;
-    end = p + 9*PATH_MAX;
-    *pw = 0;
-    while(pw < end) {
-        strcat(pw, dead_beef);
-        pw += dead_beef_len;
+    tap_ok(f_pos > 0, "bits_fput effectively write to the file");
+    tap_ok(f_pos == expected_out_len, "bits_fput write a correct number of bytes");
+
+    f = fopen("check-bits.out", "rb");
+    fread(buffer, expected_out_len, 1, f);
+    fclose(f);
+    tap_ok(!memcmp(buffer, expected_out, expected_out_len), "bits_fput write the correct bytes");
+}
+
+void
+check_bits_fget() {
+    BITS
+        *bits;
+    FILE
+        *f;
+    long
+        f_pos;
+    int
+        i, bit, expected_bit, ok;
+
+    tap_comment("test group: %s", __func__);
+    tap_comment("----------");
+
+    /* write a test file containing the bits */
+    f = fopen("check-bits.out", "wb");
+    fwrite(expected_out, expected_out_len, 1, f);
+    fclose(f);
+
+    /* read a file containing a bit string */
+    f = fopen("check-bits.out", "rb");
+    bits = bits_fget(f);
+    f_pos = ftell(f);
+    fclose(f);
+    tap_ok(f_pos == expected_out_len, "bits_fget effectively read the file");
+    tap_ok(!!bits, "bits_fget can understand a file");
+
+    ok = TRUE;
+    for(i=0; i<8*sizeof(long); ++i) {
+        bit = bits_test(bits, i);
+        expected_bit = !!(dead_beef & (1 << i));
+        ok = ok && (bit == expected_bit);
     }
-    mem_free(p);
-
-    dir = get_curdir();
-    tap_comment("obtained: '%s'", dir);
-    tap_ok(strncmp(dir, dead_beef, dead_beef_len), "get_curdir() doesn't return unitialized memory");
-    mem_free(dir);
+	tap_ok(ok, "bits_fget correctly read the bits");
+    bits_destroy(bits);
 }
 
 int main(int argc, char* argv[]) {
-    check_get_curdir();
+    check_bits_fput();
+    check_bits_fget();
     tap_done_testing();
     return 0;
 }
+
 
 
