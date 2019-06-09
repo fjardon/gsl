@@ -182,6 +182,7 @@ gsl="$GSL_PROJECT" CD="." in="build-aux/in.vim" out="build-aux/out.vim" {
    sflfile.c
    sflfind.c
    sflfort.c
+   sflfort-check.c
    sflheap.c
    sflhttp.c
    sflini.c

@@ -46,6 +46,7 @@ TESTS = src/gsl/gsl-check \
 		src/libsfl/sflbits-check \
 		src/libsfl/sfldir-check \
 		src/libsfl/sflfile-check \
+		src/libsfl/sflfort-check \
 		# end-of-tests
 
 noinst_LTLIBRARIES = \
@@ -160,5 +161,11 @@ src_libsfl_sflfile_check_SOURCES  = src/libsfl/sflfile-check.c
 src_libsfl_sflfile_check_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
 src_libsfl_sflfile_check_CFLAGS   = $(CODE_COVERAGE_CFLAGS) $(PCRE_CFLAGS)
 src_libsfl_sflfile_check_LDADD    = src/libsfl/libsfl.la src/libtap/libtap.la $(CODE_COVERAGE_LIBS) $(PCRE_LIBS)
+
+# sflfort-check: a private test program
+src_libsfl_sflfort_check_SOURCES  = src/libsfl/sflfort-check.c
+src_libsfl_sflfort_check_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+src_libsfl_sflfort_check_CFLAGS   = $(CODE_COVERAGE_CFLAGS) $(PCRE_CFLAGS)
+src_libsfl_sflfort_check_LDADD    = src/libsfl/libsfl.la src/libtap/libtap.la $(CODE_COVERAGE_LIBS) $(PCRE_LIBS)
 
 
