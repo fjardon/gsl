@@ -441,7 +441,11 @@ typedef struct {                        /*  Variable-size descriptor         */
 #   define min(a,b)        (((a) < (b))? (a): (b))
 #   define max(a,b)        (((a) > (b))? (a): (b))
 #endif
-#define ASSERT             assert
+#if (!defined(NDEBUG))
+#define ASSERT(x)          assert(x)
+#else
+#define ASSERT(x)          do { (void)sizeof(x); } while(0)
+#endif
 
 
 /*- Boolean operators and constants -----------------------------------------*/
