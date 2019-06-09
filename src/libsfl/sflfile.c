@@ -2711,7 +2711,7 @@ ftmp_open (char **pathname)
     if (pathname)
         *pathname = mem_strdup (tempfile);
 
-    tempstream = fopen (tempfile, "wb");
+    tempstream = fopen (tempfile, "wb+");
     if (tempstream)
       {
         list_create (tempitem, sizeof (FTMPITEM));
