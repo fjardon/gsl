@@ -91,6 +91,8 @@ fortune_build (
         line [LINE_MAX + 1];            /*  Line from input file             */
     int
         block_nbr;
+    int
+        errc;                           /*  Return value from libc functions */
     long
         offset;
 
@@ -134,18 +136,22 @@ fortune_build (
                      compress? "CMP": "TXT", 26);
 
     output_dbyte = htons (nbr_blocks);
-    ASSERT (fwrite (&output_dbyte, 2, 1, output));
+    errc = fwrite (&output_dbyte, 2, 1, output);
+    ASSERT (errc);
     offset = ftell (output) + nbr_blocks * 4;
 
     for (block_nbr = 0; block_nbr < nbr_blocks; block_nbr++)
       {
         output_qbyte = htonl (offset);
-        ASSERT (fwrite (&output_qbyte, 4, 1, output));
+        errc = fwrite (&output_qbyte, 4, 1, output);
+        ASSERT (errc);
         offset += sizes [block_nbr];
       }
     fseek (scratch, 0, SEEK_SET);       /*  Back to start of scratch file    */
-    while ((outsize = fread (outbuf, 1, BLOCK_SIZE, scratch)) != 0)
-        ASSERT (fwrite (outbuf, 1, outsize, output));
+    while ((outsize = fread (outbuf, 1, BLOCK_SIZE, scratch)) != 0) {
+        errc = fwrite (outbuf, 1, outsize, output);
+        ASSERT (errc);
+    }
 
     file_close (output);
     ftmp_close (scratch);
@@ -177,6 +183,9 @@ have_end_of_paragraph (Bool compress)
 static void
 have_end_of_block (Bool compress)
 {
+    int
+        errc;
+
     output_dbyte = htons (nbr_paras);
     *(dbyte *) inbuf = output_dbyte;
 
@@ -184,15 +193,19 @@ have_end_of_block (Bool compress)
       {
         outsize = compress_block (inbuf, outbuf, insize);
         output_dbyte = htons (outsize);
-        ASSERT (fwrite (&output_dbyte, 2, 1, scratch));
-        ASSERT (fwrite (outbuf, 1, outsize, scratch));
+        errc = fwrite (&output_dbyte, 2, 1, scratch);
+        ASSERT (errc);
+        errc = fwrite (outbuf, 1, outsize, scratch);
+        ASSERT (errc);
         sizes [nbr_blocks] = outsize + 2;
       }
     else
       {
         output_dbyte = htons (insize);
-        ASSERT (fwrite (&output_dbyte, 2, 1, scratch));
-        ASSERT (fwrite (inbuf, 1, insize, scratch));
+        errc = fwrite (&output_dbyte, 2, 1, scratch);
+        ASSERT (errc);
+        errc = fwrite (inbuf, 1, insize, scratch);
+        ASSERT (errc);
         sizes [nbr_blocks] = insize + 2;
       }
     insize = 2;                         /*  Clear input buffer               */
@@ -235,6 +248,8 @@ fortune_read (const char *fortune_file)
         *para_start;                    /*  Start of paragraph               */
     Bool
         compressed;                     /*  Compressed fortune data?         */
+    int
+        errc;                           /*  Return value from libc functions */
 
     /*  Initialise random-number generator if necessary                      */
     if (first_time)
@@ -260,7 +275,7 @@ fortune_read (const char *fortune_file)
 
     /*  Indexed Fortune File format starts with IFFCMP or IFFTXT             */
     file_read (fortunes, (char *) inbuf);
-    if (memcpy (inbuf, "IFFTXT", 6) == 0)
+    if (memcmp (inbuf, "IFFTXT", 6) == 0)
         compressed = FALSE;
     else
         compressed = TRUE;
@@ -268,26 +283,33 @@ fortune_read (const char *fortune_file)
     while (fgetc (fortunes) != 26);     /*  Skip past file header            */
 
     /*  Get total number of blocks in file                                   */
-    ASSERT (fread (&input_dbyte, 2, 1, fortunes));
+    errc = fread (&input_dbyte, 2, 1, fortunes);
+    ASSERT (errc);
     nbr_blocks = ntohs (input_dbyte);
 
     /*  Look at random block address in Toc                                  */
     fseek (fortunes, random (nbr_blocks) * 4, SEEK_CUR);
-    ASSERT (fread (&input_qbyte, 4, 1, fortunes));
+    errc = fread (&input_qbyte, 4, 1, fortunes);
+    ASSERT (errc);
     block_offset = ntohl (input_qbyte);
 
     /*  Go read, then decompress the block                                   */
     fseek (fortunes, block_offset, SEEK_SET);
-    ASSERT (fread (&input_dbyte, 2, 1, fortunes));
+    errc = fread (&input_dbyte, 2, 1, fortunes);
+    ASSERT (errc);
     block_size = ntohs (input_dbyte);
 
     if (compressed)
       {
-        ASSERT (fread (inbuf, 1, block_size, fortunes));
+        errc = fread (inbuf, 1, block_size, fortunes);
+        ASSERT (errc);
         expand_block (inbuf, outbuf, block_size);
       }
     else
-        ASSERT (fread (outbuf, 1, block_size, fortunes));
+      {
+        errc = fread (outbuf, 1, block_size, fortunes);
+        ASSERT (errc);
+      }
 
     /*  Chose random paragraph from block                                    */
     input_dbyte = *(dbyte *) outbuf;
