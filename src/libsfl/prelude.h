@@ -434,7 +434,7 @@ typedef struct {                        /*  Variable-size descriptor         */
 #define tbllast(x)      (x [tblsize (x) - 1])
 
 #if (!defined (random))
-#   define random(num)     (int) ((float) num * rand () / (RAND_MAX + 1.0))
+#   define random(num)     (int) ((float) (num) * rand () / (RAND_MAX + 1.0))
 #   define randomize()     srand ((unsigned) time (NULL))
 #endif
 #if (!defined (min))
