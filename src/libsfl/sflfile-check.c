@@ -70,8 +70,34 @@ void check_FOPEN_WRITE_TEXT() {
     fclose(f);
 }
 
+void
+check_ftmp_open() {
+    FILE
+        *f_tmp;
+    char
+        *tmp_pathname;
+    char
+        line[128];
+
+    f_tmp = ftmp_open(&tmp_pathname);
+    tap_ok(!!f_tmp, "ftmp_open() returns a non-null FILE*");
+    tap_ok(!!tmp_pathname, "ftmp_open() returns a non-null pathname");
+    mem_free(tmp_pathname);
+
+    fputs("first line\n", f_tmp);
+    fputs("second line\n", f_tmp);
+    fputs("third line\n", f_tmp);
+    fseek(f_tmp, 0L, SEEK_SET);
+    fgets(line, sizeof(line), f_tmp);
+    line[127] = '\0';
+    tap_comment("read: %s", line);
+    tap_ok(!strncmp(line, "first line\n", sizeof(line)), "ftmp_open() file can be read");
+    ftmp_close(f_tmp);
+}
+
 int main(int argc, char* argv[]) {
     check_FOPEN_WRITE_TEXT();
+    check_ftmp_open();
     tap_done_testing();
     return 0;
 }
