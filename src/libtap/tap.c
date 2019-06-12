@@ -54,7 +54,7 @@ static char const* print_to_eol(FILE* stream, char const* text) {
         fputs(text, stream);
         return NULL;
     }
-    fprintf(stream, "%*s", (int)(p_eol - text), text);
+    fprintf(stream, "%.*s", (int)(p_eol - text), text);
     return p_eol+1;
 }
 
