@@ -900,6 +900,8 @@ MODULE write_request_log_entry (THREAD *thread)
         *log_line;
     DESCR
         log;
+    int
+        errc;                           /*  Return value from libc functions */
 
     if (tcb-> symtab)
         sym_delete_table (tcb->symtab);
@@ -937,8 +939,10 @@ MODULE write_request_log_entry (THREAD *thread)
     log_line = tok_subst (tcb-> log_format, tcb-> symtab);
     if (tcb-> handle)
       {
-        ASSERT (write (tcb-> handle, log_line, strlen (log_line)));
-        ASSERT (write (tcb-> handle, "\n", 1));
+        errc = write (tcb-> handle, log_line, strlen (log_line));
+        ASSERT (errc);
+        errc = write (tcb-> handle, "\n", 1);
+        ASSERT (errc);
       }
     tcb-> stats.file_size  += strlen (log_line) + 1;
     tcb-> stats.file_lines += 1;

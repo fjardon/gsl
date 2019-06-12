@@ -249,6 +249,7 @@ process_create (
         process_flags;                  /*  Process creation flags           */
     int
         argn,                           /*  Argument number                  */
+        errc,                           /*  Return value from libc functions */
         rc;                             /*  Return code from lib$spawn       */
     Bool
         rebuilt_argv = FALSE;           /*  Did we rebuild argv[]?           */
@@ -318,7 +319,8 @@ process_create (
 
     /*  If requested, change to working directory                            */
     if (workdir) {
-        ASSERT (chdir (workdir));
+        errc = chdir (workdir);
+        ASSERT (errc);
     }
     /*  Prepare process flags                                                */
     if (wait)
@@ -342,7 +344,8 @@ process_create (
         &process-> status);
 
     if (workdir) {                      /*  Switch back to original dir      */
-        ASSERT (chdir (curdir));
+        errc = chdir (curdir);
+        ASSERT (errc);
     }
     mem_free (curdir);
 
@@ -766,6 +769,8 @@ process_server (
         pid_buffer [10];
     struct flock
         lock_file;                      /*  flock() argument block           */
+    int
+        errc;                           /*  Return value from libc functions */
 #endif
     int
         argi = 0,                       /*  Input arguments iterator         */
@@ -819,7 +824,8 @@ process_server (
     /*  argument to this function (or not, if workdir is NULL or empty).     */
 
     if (workdir && strused (workdir)) {
-        ASSERT (chdir (workdir));
+        errc = chdir (workdir);
+        ASSERT (errc);
     }
     /*  We set the umask so that new files are given mode 750 octal          */
 
@@ -829,8 +835,10 @@ process_server (
     /*  functions that assume that these files are open can still work.      */
 
     file_handle = open ("/dev/null", O_RDWR);    /*  stdin = handle 0        */
-    ASSERT (dup (file_handle));                  /*  stdout = handle 1       */
-    ASSERT (dup (file_handle));                  /*  stderr = handle 2       */
+    errc = dup(file_handle);
+    ASSERT (errc);                               /*  stdout = handle 1       */
+    errc = dup(file_handle);
+    ASSERT (errc);                               /*  stderr = handle 2       */
 
     /*  We enforce a lock on the lockfile, if specified, so that only one    */
     /*  copy of the server can run at once.  We return -1 if the lock fails. */
@@ -850,7 +858,8 @@ process_server (
           }
         /*  We record the server's process id in the lock file               */
         snprintf (pid_buffer, sizeof (pid_buffer), "%6d\n", getpid ());
-        ASSERT (write (file_handle, pid_buffer, strlen (pid_buffer)));
+        errc = write (file_handle, pid_buffer, strlen (pid_buffer));
+        ASSERT (errc);
       }
 
     /*  We ignore any hangup signal from the controlling TTY                 */

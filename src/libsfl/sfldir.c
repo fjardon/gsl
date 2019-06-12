@@ -1212,7 +1212,7 @@ get_curdir (void)
 
 #if (defined (__UNIX__) || defined (__OS2__))
 
-    errc = getcwd (curdir, PATH_MAX);
+    errc = !!getcwd (curdir, PATH_MAX);
     ASSERT (errc);
 
 #elif (defined (__VMS__))

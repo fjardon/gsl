@@ -387,11 +387,14 @@ MODULE set_debug_mode (THREAD *thread)
 
 MODULE set_prompt (THREAD *thread)
 {
+    int
+        errc;                           /*  Return value of libc functions   */
     tcb = thread-> tcb;                 /*  Point to thread's context        */
     memset (buffer, 0, BUFFER_SIZE);
     printf ("Enter a request (? for help) =>");
     memset (buffer, 0, BUFFER_SIZE);
-    ASSERT (fgets (buffer, BUFFER_SIZE, stdin));
+    errc = !!fgets (buffer, BUFFER_SIZE, stdin);
+    ASSERT (errc);
 }
 
 

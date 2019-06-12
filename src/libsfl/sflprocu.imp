@@ -220,7 +220,8 @@
 #   define SEND_ERROR_AND_EXIT(errcode)                              \
     {                                                                \
       int SEAE_error = errcode;                                      \
-      ASSERT (write (pipe_handle [1], &(SEAE_error), sizeof (SEAE_error))); \
+      int errc = write (pipe_handle [1], &(SEAE_error), sizeof (SEAE_error)); \
+      ASSERT (errc); \
       exit (EXIT_FAILURE);                                           \
     }
 
