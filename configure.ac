@@ -58,6 +58,8 @@ PKG_CHECK_MODULES([PCRE], [libpcre >= 6.6])
 AX_CODE_COVERAGE
 
 # Checks for libraries.
+AC_SEARCH_LIBS([cos], [m], [], [
+    AC_MSG_ERROR([unable to find the 'cos()' function])])
 
 # Checks for header files.
 
