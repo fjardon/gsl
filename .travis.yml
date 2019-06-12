@@ -1,0 +1,15 @@
+dist: xenial
+addons:
+    apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-9
+          - pkg-config
+          - autoconf-archive
+          - libtool
+language: c
+compiler:
+    - gcc
+script: ./autogen.sh && ./build-aux/travis -j 8 && ./build-aux/travis check
+

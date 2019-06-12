@@ -85,3 +85,4 @@ else
     automake
 fi
 
+exit 0

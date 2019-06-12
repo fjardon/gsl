@@ -1,4 +1,5 @@
 gsl="$GSL_PROJECT" CD="." in="build-aux/in.vim" out="build-aux/out.vim" {
+ .travis.yml
  AUTHORS
  autogen.sh
  ChangeLog
