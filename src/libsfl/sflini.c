@@ -467,11 +467,13 @@ ini_dyn_save (
             if (strneq (ini_section, ini_value))
               {
                 strcpy (ini_section, ini_value);
+                ini_section[LINE_MAX-2] = '\0';
                 snprintf (iniline, sizeof (iniline), "[%s]", ini_section);
                 file_write (inifile, "");
                 file_write (inifile, iniline);
               }
             /*  We always put quotes around values when writing              */
+            ini_keyword[LINE_MAX-8] = '\0';
             snprintf (iniline, sizeof (iniline), "    %s = \"", ini_keyword);
             outchar = iniline + strlen (iniline);
             for (valchar = symbol-> value; *valchar; valchar++)

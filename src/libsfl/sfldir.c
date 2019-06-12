@@ -543,7 +543,7 @@ static char *
 format_time (DIRST *dir)
 {
     static char
-        buffer [13],                    /*  Returned string                  */
+        buffer [32],                    /*  Returned string                  */
         *months = "Jan\0Feb\0Mar\0Apr\0May\0Jun\0Jul\0Aug\0Sep\0Oct\0Nov\0Dec";
     static time_t
         six_months_ago = 0;

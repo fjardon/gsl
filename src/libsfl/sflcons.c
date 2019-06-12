@@ -257,7 +257,7 @@ static char *
 date_str (void)
 {
     static char
-        formatted_date [11];
+        formatted_date [32];
     time_t
         time_secs;
     struct tm
