@@ -1,6 +1,8 @@
 
 # GSL/4.1 - a Universal Code Generator
 
+![travis-ci](https://travis-ci.org/fjardon/gsl.svg?branch=master)
+
 ## Contents
 
 
