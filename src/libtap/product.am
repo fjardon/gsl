@@ -25,34 +25,19 @@
 #*  not, see <http://www.gnu.org/licenses/>.                                 *
 #*  --------------------------------------------------------------           *
 #*===========================================================================*
-ACLOCAL_AMFLAGS = -I m4
-include $(top_srcdir)/aminclude_static.am
+AM_CPPFLAGS        += -I$(builddir)/%reldir% -I$(srcdir)/%reldir%
+EXTRA_DIST         +=
+BUILT_SOURCES      +=
+GENERATION_STAMPS  +=
+# every product is located at the top of the build tree so that any product can
+# reference any other produce easily
+noinst_LTLIBRARIES += libtap.la
+bin_PROGRAMS       +=
+check_PROGRAMS     +=
 
-AM_CPPFLAGS = -D_XOPEN_SOURCE_EXTENDED \
-			  -I$(top_builddir)/lib -I$(top_srcdir)/lib
-
-TEST_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
-                  $(top_srcdir)/build-aux/tap-driver.sh
-
-SUBDIRS            = lib
-BUILT_SOURCES      =
-CLEANFILES         = generated
-EXTRA_DIST         = src/srcdir.txt
-GENERATION_STAMPS  =
-
-noinst_LTLIBRARIES =
-bin_PROGRAMS       =
-check_PROGRAMS     =
-
-# extra target for code generation
-generated : $(GENERATION_STAMPS)
-	touch $@
-
-# include all products from this project
-include src/libtap/product.am
-include src/libsfl/product.am
-include src/libsmt/product.am
-include src/gsl/product.am
-
-CLEANFILES        += $(GENERATION_STAMPS)
+# libtap: a private library
+libtap_la_SOURCES  = %reldir%/tap.h %reldir%/tap.c
+libtap_la_CPPFLAGS =
+libtap_la_CFLAGS   =
+libtap_la_LIBADD   =
 

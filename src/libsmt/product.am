@@ -25,34 +25,52 @@
 #*  not, see <http://www.gnu.org/licenses/>.                                 *
 #*  --------------------------------------------------------------           *
 #*===========================================================================*
-ACLOCAL_AMFLAGS = -I m4
-include $(top_srcdir)/aminclude_static.am
+AM_CPPFLAGS        += -I$(builddir)/%D% -I$(srcdir)/%D%
+EXTRA_DIST         +=
+BUILT_SOURCES      +=
+CLEANFILES         += %D%/smt3.h
+GENERATION_STAMPS  += libsmt-generated
+noinst_LTLIBRARIES += libsmt.la
+bin_PROGRAMS       +=
+check_PROGRAMS     +=
 
-AM_CPPFLAGS = -D_XOPEN_SOURCE_EXTENDED \
-			  -I$(top_builddir)/lib -I$(top_srcdir)/lib
+# libsmt: a private library
+SMT3_H_HDRS = \
+    %D%/smthead.h %D%/smtlib.h %D%/smtdefn.h %D%/smttime.h   \
+    %D%/smtserv.h %D%/smtmsg.h %D%/smtsslm.h %D%/smtrdnsl.h  \
+    %D%/smtxlog.h
 
-TEST_LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) \
-                  $(top_srcdir)/build-aux/tap-driver.sh
-
-SUBDIRS            = lib
-BUILT_SOURCES      =
-CLEANFILES         = generated
-EXTRA_DIST         = src/srcdir.txt
-GENERATION_STAMPS  =
-
-noinst_LTLIBRARIES =
-bin_PROGRAMS       =
-check_PROGRAMS     =
-
-# extra target for code generation
-generated : $(GENERATION_STAMPS)
+libsmt-generated: %D%/smt3.h
 	touch $@
 
-# include all products from this project
-include src/libtap/product.am
-include src/libsfl/product.am
-include src/libsmt/product.am
-include src/gsl/product.am
+%D%/smt3.h: $(SMT3_H_HDRS)
+	cat $^ > $@
 
-CLEANFILES        += $(GENERATION_STAMPS)
+SMT_HDRS = \
+    %D%/smtdefn.h %D%/smthead.h %D%/smtlib.h   %D%/smtmem.h   \
+    %D%/smtmsg.h  %D%/smtpriv.h %D%/smtrdnsl.h %D%/smtserv.h  \
+    %D%/smtsimu.h %D%/smtsslm.h %D%/smttime.h  %D%/smtxlog.h  \
+    %D%/sysman.h
+
+SMT_D_DLGS = \
+    %D%/smtecho.d %D%/smtecho.i %D%/smtlog.d  %D%/smtlog.i   \
+    %D%/smtoper.d %D%/smtoper.i %D%/smtpipe.d %D%/smtpipe.i  \
+    %D%/smtpop.d  %D%/smtpop.i  %D%/smtrdns.d %D%/smtrdns.i  \
+    %D%/smtsimu.d %D%/smtsimu.i %D%/smtslot.d %D%/smtslot.i  \
+    %D%/smtsmtp.d %D%/smtsmtp.i %D%/smtsock.d %D%/smtsock.i  \
+    %D%/smttran.d %D%/smttran.i %D%/smttst1.d %D%/smttst1.i  \
+    %D%/smttst2.d %D%/smttst2.i %D%/smttst3.d %D%/smttst3.i  \
+    %D%/smtxlog.d %D%/smtxlog.i %D%/sysclia.d %D%/sysclia.i  \
+    %D%/sysmana.d %D%/sysmana.i
+
+libsmt_la_SOURCES  = \
+    %D%/smtecho.c  %D%/smtlib.c  %D%/smtlog.c  %D%/smtmsg.c   \
+    %D%/smtoper.c  %D%/smtpipe.c %D%/smtpop.c  %D%/smtrdns.c  \
+    %D%/smtrdnsl.c %D%/smtserv.c %D%/smtsimu.c %D%/smtslot.c  \
+    %D%/smtsmtp.c  %D%/smtsock.c %D%/smttime.c %D%/smttran.c  \
+    %D%/smttst1.c  %D%/smttst2.c %D%/smttst3.c %D%/smtxlog.c  \
+    %D%/smt3.h     $(SMT_HDRS)   $(SMT_D_DLGS)
+libsmt_la_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+libsmt_la_CFLAGS   = $(CODE_COVERAGE_CFLAGS)
+libsmt_la_LIBADD   = libsfl.la $(CODE_COVERAGE_LIBS)
 

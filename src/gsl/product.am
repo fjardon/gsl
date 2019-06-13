@@ -1,0 +1,92 @@
+#*===========================================================================*
+#*                                                                           *
+#*  Makefile.am - Automake configuration for the project                     *
+#*                                                                           *
+#*  Copyright (c) 2019 Frederic Jardon  <frederic.jardon@gmail.com>          *
+#*                                                                           *
+#*  ------------------ GPL Licensed Source Code ------------------           *
+#*  Frederic Jardon makes this software available under the GNU              *
+#*  General Public License (GPL) license for open source projects.           *
+#*  For details of the GPL license please see www.gnu.org or read            *
+#*  the file license.gpl provided in this package.                           *
+#*                                                                           *
+#*  This program is free software; you can redistribute it and/or            *
+#*  modify it under the terms of the GNU General Public License as           *
+#*  published by the Free Software Foundation; either version 3 of           *
+#*  the License, or (at your option) any later version.                      *
+#*                                                                           *
+#*  This program is distributed in the hope that it will be useful,          *
+#*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+#*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+#*  GNU General Public License for more details.                             *
+#*                                                                           *
+#*  You should have received a copy of the GNU General Public                *
+#*  License along with this program in the file 'license.gpl'; if            *
+#*  not, see <http://www.gnu.org/licenses/>.                                 *
+#*  --------------------------------------------------------------           *
+#*===========================================================================*
+AM_CPPFLAGS        += -I$(builddir)/%D% -I$(srcdir)/%D%
+EXTRA_DIST         +=
+BUILT_SOURCES      +=
+CLEANFILES         += %D%/gsl.h
+GENERATION_STAMPS  += gsl-generated
+noinst_LTLIBRARIES += libgsl.la
+bin_PROGRAMS       += gsl
+check_PROGRAMS     += gsl-check
+
+# libgsl: a private library
+GSL_H_HDRS = \
+    %D%/gghead.h %D%/ggcomm.h %D%/ggpars.h  %D%/ggparsm.h  \
+    %D%/ggscrp.h %D%/ggscop.h %D%/ggobjt.h  %D%/ggsymb.h   \
+    %D%/gggsl.h  %D%/ggcode.h %D%/ggcodem.h %D%/ggfile.h   \
+    %D%/ggstrn.h %D%/ggenvt.h %D%/ggconv.h  %D%/ggmath.h   \
+    %D%/ggsock.h %D%/ggthrd.h %D%/ggxml.h   %D%/ggtime.h   \
+    %D%/ggpcre.h %D%/ggdiag.h %D%/ggproc.h
+
+gsl-generated: %D%/gsl.h
+	touch $@
+
+%D%/gsl.h: $(GSL_H_HDRS)
+	cat $^ > %D%/gsl.h
+
+GSL_HDRS = \
+    %D%/ggcode.h  %D%/ggcodem.h %D%/ggcomm.h %D%/ggconv.h  \
+    %D%/ggdiag.h  %D%/ggenvt.h  %D%/ggfile.h %D%/gggsl.h   \
+    %D%/gghead.h  %D%/ggmath.h  %D%/ggobjt.h %D%/ggpars.h  \
+    %D%/ggparsm.h %D%/ggpcre.h  %D%/ggpriv.h %D%/ggproc.h  \
+    %D%/ggscop.h  %D%/ggscrp.h  %D%/ggsock.h %D%/ggstrn.h  \
+    %D%/ggsymb.h  %D%/ggthrd.h  %D%/ggtime.h %D%/ggxml.h   \
+    %D%/gsl.h     %D%/version.h
+
+GSL_D_DLGS = \
+    %D%/ggcode.d %D%/ggcode.i %D%/gggsl.d  %D%/gggsl.i   \
+    %D%/ggpars.d %D%/ggpars.i %D%/ggscrp.d %D%/ggscrp.i  \
+    %D%/ggsock.d %D%/ggsock.i %D%/ggthrd.d %D%/ggthrd.i  \
+    %D%/gsl.d    %D%/gsl.i
+
+GSL_INC_FILES = \
+    %D%/ggfunc.inc %D%/testall.inc
+
+libgsl_la_SOURCES  = \
+    %D%/ggcode.c  %D%/ggcodem.c    %D%/ggcomm.c %D%/ggconv.c   \
+    %D%/ggdiag.c  %D%/ggenvt.c     %D%/ggfile.c %D%/gggsl.c    \
+    %D%/ggmath.c  %D%/ggobjt.c     %D%/ggpars.c %D%/ggparsm.c  \
+    %D%/ggpcre.c  %D%/ggproc.c     %D%/ggscop.c %D%/ggscrp.c   \
+    %D%/ggsock.c  %D%/ggstrn.c     %D%/ggsymb.c %D%/ggthrd.c   \
+    %D%/ggtime.c  %D%/ggxml.c      %D%/gsl.c    $(GSL_HDRS)    \
+    $(GSL_D_DLGS) $(GSL_INC_FILES)
+libgsl_la_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+libgsl_la_CFLAGS   = $(CODE_COVERAGE_CFLAGS) $(PCRE_CFLAGS)
+libgsl_la_LIBADD   = libsfl.la libsmt.la $(CODE_COVERAGE_LIBS) $(PCRE_LIBS)
+
+# gsl: a public program
+gsl_SOURCES = %D%/gsl.c
+gsl_CFLAGS  = $(PCRE_CFLAGS)
+gsl_LDADD   = libgsl.la libsmt.la libsfl.la $(PCRE_LIBS)
+
+# gsl-check: a private test program
+gsl_check_SOURCES  = %D%/gsl-check.c
+gsl_check_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+gsl_check_CFLAGS   = $(CODE_COVERAGE_CFLAGS) $(PCRE_CFLAGS)
+gsl_check_LDADD    = libgsl.la libtap.la $(CODE_COVERAGE_LIBS) $(PCRE_LIBS)
+

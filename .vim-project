@@ -108,6 +108,7 @@ gsl="$GSL_PROJECT" CD="." in="build-aux/in.vim" out="build-aux/out.vim" {
    gsl.i
    gsl.l
    Makefile
+   product.am
    testabort.gsl
    testall.gsl
    testall.inc
@@ -149,13 +150,13 @@ gsl="$GSL_PROJECT" CD="." in="build-aux/in.vim" out="build-aux/out.vim" {
    ggthrd.h
    ggtime.h
    ggxml.h
-   gsl.h
    version.h
   }
   libsfl="libsfl" {
    Makefile
-   sflbits.c
+   product.am
    sflbits-check.c
+   sflbits.c
    sflcomp.c
    sflcons.c
    sflconv.c
@@ -182,8 +183,8 @@ gsl="$GSL_PROJECT" CD="." in="build-aux/in.vim" out="build-aux/out.vim" {
    sflfile-check.c
    sflfile.c
    sflfind.c
-   sflfort.c
    sflfort-check.c
+   sflfort.c
    sflheap.c
    sflhttp.c
    sflini.c
@@ -222,7 +223,6 @@ gsl="$GSL_PROJECT" CD="." in="build-aux/in.vim" out="build-aux/out.vim" {
    sflxmll.c
    sflxmls.c
    prelude.h
-   sfl.h
    sflbits.h
    sflcomp.h
    sflcons.h
@@ -271,6 +271,7 @@ gsl="$GSL_PROJECT" CD="." in="build-aux/in.vim" out="build-aux/out.vim" {
   }
   libsmt="libsmt" {
    Makefile
+   product.am
    smtecho.c
    smtecho.d
    smtecho.i

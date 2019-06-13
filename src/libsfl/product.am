@@ -1,0 +1,115 @@
+#*===========================================================================*
+#*                                                                           *
+#*  Makefile.am - Automake configuration for the project                     *
+#*                                                                           *
+#*  Copyright (c) 2019 Frederic Jardon  <frederic.jardon@gmail.com>          *
+#*                                                                           *
+#*  ------------------ GPL Licensed Source Code ------------------           *
+#*  Frederic Jardon makes this software available under the GNU              *
+#*  General Public License (GPL) license for open source projects.           *
+#*  For details of the GPL license please see www.gnu.org or read            *
+#*  the file license.gpl provided in this package.                           *
+#*                                                                           *
+#*  This program is free software; you can redistribute it and/or            *
+#*  modify it under the terms of the GNU General Public License as           *
+#*  published by the Free Software Foundation; either version 3 of           *
+#*  the License, or (at your option) any later version.                      *
+#*                                                                           *
+#*  This program is distributed in the hope that it will be useful,          *
+#*  but WITHOUT ANY WARRANTY; without even the implied warranty of           *
+#*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            *
+#*  GNU General Public License for more details.                             *
+#*                                                                           *
+#*  You should have received a copy of the GNU General Public                *
+#*  License along with this program in the file 'license.gpl'; if            *
+#*  not, see <http://www.gnu.org/licenses/>.                                 *
+#*  --------------------------------------------------------------           *
+#*===========================================================================*
+AM_CPPFLAGS        += -I$(builddir)/%D% -I$(srcdir)/%D%
+EXTRA_DIST         +=
+BUILT_SOURCES      +=
+CLEANFILES         += %D%/sfl.h
+GENERATION_STAMPS  += libsfl-generated
+noinst_LTLIBRARIES += libsfl.la
+bin_PROGRAMS       +=
+check_PROGRAMS     += \
+    sflbits-check \
+    sfldir-check  \
+    sflfile-check \
+    sflfort-check
+
+
+# libsfl: a private library
+SFL_H_HDRS = \
+    %D%/sflhead.h  %D%/prelude.h %D%/sflbits.h   %D%/sflcomp.h  \
+    %D%/sflcons.h  %D%/sflconv.h %D%/sflcryp.h   %D%/sfldate.h  \
+    %D%/sfldescr.h %D%/sflexdr.h %D%/sflfile.h   %D%/sflfind.h  \
+    %D%/sflfort.h  %D%/sflheap.h %D%/sfllang.h   %D%/sfllbuf.h  \
+    %D%/sfllist.h  %D%/sflnode.h %D%/sflmath.h   %D%/sflmem.h   \
+    %D%/sflmesg.h  %D%/sflmime.h %D%/sflnode.h   %D%/sfldir.h   \
+    %D%/sflslot.h  %D%/sflsock.h %D%/sflmail.h   %D%/sflsort.h  \
+    %D%/sflsha.h   %D%/sflstr.h  %D%/sflsymb.h   %D%/sflproc.h  \
+    %D%/sflprint.h %D%/sflsyst.h %D%/sflsearch.h %D%/sflhttp.h  \
+    %D%/sflini.h   %D%/sflenv.h  %D%/sfltok.h    %D%/sfltree.h  \
+    %D%/sfltron.h  %D%/sfluid.h  %D%/sflxml.h    %D%/sflxmll.h  \
+    %D%/sflxmls.h
+
+libsfl-generated: %D%/sfl.h
+	touch $@
+
+%D%/sfl.h : $(SFL_H_HDRS)
+	cat $^ > $@
+
+SFL_D_DLGS = \
+    %D%/sflcvst.d %D%/sflcvst.i %D%/sflscrit.d %D%/sflscrit.i
+
+SFL_IMP_FILES = \
+    %D%/sflproco.imp %D%/sflprocu.imp %D%/sflprocv.imp %D%/sflprocw.imp  \
+    %D%/sflprocx.imp
+
+libsfl_la_SOURCES  = \
+    %D%/sflbits.c    %D%/sflcomp.c  %D%/sflcons.c  %D%/sflconv.c    \
+    %D%/sflcryp.c    %D%/sflcvbs.c  %D%/sflcvdp.c  %D%/sflcvds.c    \
+    %D%/sflcvns.c    %D%/sflcvsb.c  %D%/sflcvsd.c  %D%/sflcvsn.c    \
+    %D%/sflcvst.c    %D%/sflcvtp.c  %D%/sflcvts.c  %D%/sfldate.c    \
+    %D%/sfldes.c     %D%/sfldescr.c %D%/sfldir.c   %D%/sflenv.c     \
+    %D%/sflexdr.c    %D%/sflfile.c  %D%/sflfind.c  %D%/sflfort.c    \
+    %D%/sflheap.c    %D%/sflhttp.c  %D%/sflini.c   %D%/sfllang.c    \
+    %D%/sfllbuf.c    %D%/sfllist.c  %D%/sflmail.c  %D%/sflmath.c    \
+    %D%/sflmem.c     %D%/sflmesg.c  %D%/sflmime.c  %D%/sflnode.c    \
+    %D%/sflprint.c   %D%/sflproc.c  %D%/sflscrit.c %D%/sflsearch.c  \
+    %D%/sflsha.c     %D%/sflslot.c  %D%/sflsock.c  %D%/sflsort.c    \
+    %D%/sflstr.c     %D%/sflsymb.c  %D%/sflsyst.c  %D%/sfltok.c     \
+    %D%/sfltree.c    %D%/sfltron.c  %D%/sfluid.c   %D%/sflxml.c     \
+    %D%/sflxmll.c    %D%/sflxmls.c  %D%/sfl.h      $(SFL_D_DLGS)    \
+    $(SFL_IMP_FILES) %D%/sfldes.h   %D%/sflprocx.h $(SFL_H_HDRS)
+libsfl_la_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+libsfl_la_CFLAGS   = $(CODE_COVERAGE_CFLAGS)
+libsfl_la_LIBADD   = $(CODE_COVERAGE_LIBS)
+
+# sflbits-check: a private test program
+sflbits_check_SOURCES  = %D%/sflbits-check.c %D%/sflbits.h
+sflbits_check_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+sflbits_check_CFLAGS   = $(CODE_COVERAGE_CFLAGS)
+sflbits_check_LDADD    = libsfl.la libtap.la $(CODE_COVERAGE_LIBS)
+
+# sfldir-check: a private test program
+sfldir_check_SOURCES   = %D%/sfldir-check.c %D%/sfldir.h
+sfldir_check_CPPFLAGS  = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+sfldir_check_CFLAGS    = $(CODE_COVERAGE_CFLAGS)
+sfldir_check_LDADD     = libsfl.la libtap.la $(CODE_COVERAGE_LIBS)
+
+# sflfile-check: a private test program
+sflfile_check_SOURCES  = %D%/sflfile-check.c %D%/sflfile.h
+sflfile_check_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+sflfile_check_CFLAGS   = $(CODE_COVERAGE_CFLAGS)
+sflfile_check_LDADD    = libsfl.la libtap.la $(CODE_COVERAGE_LIBS)
+
+# sflfort-check: a private test program
+sflfort_check_SOURCES  = %D%/sflfort-check.c %D%/sflfort.h
+sflfort_check_CPPFLAGS = $(AM_CPPFLAGS) $(CODE_COVERAGE_CPPFLAGS)
+sflfort_check_CFLAGS   = $(CODE_COVERAGE_CFLAGS)
+sflfort_check_LDADD    = libsfl.la libtap.la $(CODE_COVERAGE_LIBS)
+
+
+
