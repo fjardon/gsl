@@ -11,5 +11,5 @@ addons:
 language: c
 compiler:
     - gcc
-script: ./autogen.sh && ./build-aux/travis -j 8 && ./build-aux/travis check
+script: ./build-aux/travis
 

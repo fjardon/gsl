@@ -35,48 +35,52 @@ if [ -z "${GSL_PROJECT}" ]; then
     GSL_PROJECT=$(cd $(dirname $(dirname "$0")) ; pwd -P)
 fi
 
+# Ensure project autotool infrastructure is present
+if [ ! -f "${GSL_PROJECT}/configure" ]; then
+    echo "Generating configure script ..."
+    cd "${GSL_PROJECT}"
+    "${SHELL}" ./autogen.sh
+fi
+
 # Configuration variables
 BUILD_DIR="${GSL_PROJECT}-build"
 
 # Handle option if any
-if [ "$1" == "destroy" ]; then
+if [ -d "${BUILD_DIR}" ]; then
     echo "Removing old build directory ..."
     rm -rf "${BUILD_DIR}"
-    exit 0
 fi
 
 # Create the build directory
 mkdir -p "${BUILD_DIR}"
 cd "${BUILD_DIR}"
 
-# Initial configuration of sources if needed
-if [ ! -e "${BUILD_DIR}/config.status" ]; then
-    echo "Configuring ..."
-    "${GSL_PROJECT}/configure" --prefix="${HOME}/.local"
-fi
+# Initial configuration
+echo "Configuring ..."
+"${GSL_PROJECT}/configure" --prefix="${HOME}/.local"
 
 ARGNO=0
-if [ -n "$1" ]; then
-    MAKE[${ARGNO}]="$1"
-    ARGNO=$(expr ${ARGNO} + 1)
-else
-    MAKE[${ARGNO}]="all"
-    ARGNO=$(expr ${ARGNO} + 1)
-fi
-
-MAKE[${ARGNO}]='CFLAGS=-g -O0 -Wall'
+MAKE[${ARGNO}]=''
+ARGNO=$(expr ${ARGNO} + 1)
+MAKE[${ARGNO}]='-j8'
+ARGNO=$(expr ${ARGNO} + 1)
+MAKE[${ARGNO}]="CFLAGS=${CFLAGS}${CFLAGS+ }-O3 -pipe -DNDEBUG=1"
+ARGNO=$(expr ${ARGNO} + 1)
+MAKE[${ARGNO}]='VERBOSE=1'
 ARGNO=$(expr ${ARGNO} + 1)
 
 # Platform specific tweaks
 if [[ $(uname -s) == CYGWIN* ]]; then
-    MAKE[${ARGNO}]="LDFLAGS=${LDFLAGS}${LDFLAGS+ }-no-undefined"
+    MAKE[${ARGNO}]="LDFLAGS=${LDFLAGS}${LDFLAGS+ }-Wl,--no-undefined"
     ARGNO=$(expr ${ARGNO} + 1)
 fi
 
-# Make
-if [[ "check" == "$1" ]]; then
-    trap 'cat "${BUILD_DIR}/test-suite.log"' ERR
-fi
+# Make distcheck
+MAKE[0]='distcheck'
+make "${MAKE[@]}"
+
+# Make all
+MAKE[0]='check'
 make "${MAKE[@]}"
 
 
