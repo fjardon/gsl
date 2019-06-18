@@ -117,9 +117,15 @@ check_bits_fget() {
     bits_destroy(bits);
 }
 
+void
+cleanup() {
+    remove ("check-bits.out");
+}
+
 int main(int argc, char* argv[]) {
     check_bits_fput();
     check_bits_fget();
+    cleanup();
     tap_done_testing();
     return 0;
 }

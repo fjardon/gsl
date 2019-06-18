@@ -95,9 +95,15 @@ check_ftmp_open() {
     ftmp_close(f_tmp);
 }
 
+void
+cleanup() {
+    remove ("tmp.out");
+}
+
 int main(int argc, char* argv[]) {
     check_FOPEN_WRITE_TEXT();
     check_ftmp_open();
+    cleanup();
     tap_done_testing();
     return 0;
 }

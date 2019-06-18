@@ -81,9 +81,16 @@ check_fortune_read() {
     mem_free(fortune);
 }
 
+void
+cleanup() {
+    remove("check-fortune.in");
+    remove("check-fortune.out");
+}
+
 int main(int argc, char* argv[]) {
     check_fortune_build();
     check_fortune_read();
+    cleanup();
     tap_done_testing();
     return 0;
 }
