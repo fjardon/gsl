@@ -30,6 +30,11 @@ EXTRA_DIST         +=
 BUILT_SOURCES      +=
 CLEANFILES         += %D%/sfl.h
 GENERATION_STAMPS  += libsfl-generated
+TESTS              +=  \
+    sflbits-check \
+    sfldir-check  \
+    sflfile-check \
+    sflfort-check
 noinst_LTLIBRARIES += libsfl.la
 bin_PROGRAMS       +=
 check_PROGRAMS     += \

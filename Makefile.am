@@ -39,6 +39,7 @@ BUILT_SOURCES      =
 CLEANFILES         = generated
 EXTRA_DIST         = src/srcdir.txt
 GENERATION_STAMPS  =
+TESTS              =
 
 noinst_LTLIBRARIES =
 bin_PROGRAMS       =

@@ -79,8 +79,4 @@ fi
 MAKE[0]='distcheck'
 make "${MAKE[@]}"
 
-# Make all
-MAKE[0]='check'
-make "${MAKE[@]}"
-
 
