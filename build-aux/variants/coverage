@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+CONFIGURE+=("--enable-code-coverage")
+CFLAGS+=("-g -O0 -Wall -pipe")
+if [[ $(uname -s) == CYGWIN* ]]; then
+    LDFLAGS+=("-Wl,--no-undefined")
+fi
+

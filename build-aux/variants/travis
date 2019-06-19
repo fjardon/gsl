@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+CFLAGS+=("-O3" "-DNDEBUG" "-pipe")
+if [[ $(uname -s) == CYGWIN* ]]; then
+    LDFLAGS+=("-Wl,--no-undefined")
+fi
+

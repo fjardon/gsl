@@ -11,5 +11,5 @@ addons:
 language: c
 compiler:
     - gcc
-script: ./build-aux/travis
+script: ./build-aux/build variant travis && ./build-aux/build distcheck -j8
 

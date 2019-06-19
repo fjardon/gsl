@@ -27,16 +27,79 @@
 #*  --------------------------------------------------------------           *
 #*===========================================================================*
 
+# Usage:
+# ------
+#
+# build variant
+# - display current variant (default debug)
+#
+# build variant VARIANT
+# - set the current variant
+#
+# build destroy
+# - destroy current variant
+#
+# build [MAKE-OPTIONS]
+#
+
 # Abort on any error
 set -e
 
+function echoerr { echo "$@" 1>&2; }
+function join_strings { local sep="$1"; shift; local ret=""; while [ ! $# -eq 0 ]; do ret="${ret}${ret:+${sep}}$1"; shift; done; echo "$ret"; }
+function echoquoted { echo "\"$(join_strings "\" \"" $@)\"" ; }
+
 # Check if not called from inside VIM using project plugin
-if [ -z "${GSL_PROJECT}" ]; then
-    GSL_PROJECT=$(cd $(dirname $(dirname "$0")) ; pwd -P)
+SCRIPT_DIR=$(dirname "$0")
+SRC_DIR="${GSL_PROJECT}"
+if [ -z "${SRC_DIR}" ]; then
+    SRC_DIR=$(cd $(dirname "${SCRIPT_DIR}") ; pwd -P)
 fi
 
+# Initialize default variant
+declare -a CONFIGURE
+declare -a MAKE
+declare -a CPPFLAGS
+declare -a CFLAGS
+declare -a CXXFLAGS
+declare -a LDFLAGS
+declare -a LIBS
+CONFIGURE=()
+MAKE=($@)
+CONFIGURE+=("--prefix=${HOME}/.local")
+VARIANT="debug"
+VARIANT_FILE="${SCRIPT_DIR}/.variant"
+
+# Load current variant
+if [ -f "${VARIANT_FILE}" ]; then
+    echo "Loading variant: ${VARIANT_FILE} ..."
+    source "${SCRIPT_DIR}/.variant"
+fi
+
+# Handle variant option
+if [ "$1" == "variant" ]; then
+    if [ ! -z "$2" ]; then
+        VARIANT="$2"
+        echo "VARIANT=\"${VARIANT}\"" > "${VARIANT_FILE}"
+    else
+        echo "Current variant is: ${VARIANT}"
+    fi
+    exit 0
+fi
+
+# Sanity check the variant
+if [ -z "${VARIANT}" ]; then
+    echoerr "Variant is not defined... ABORTING!"
+    exit 1
+fi
+if [ ! -f "${SCRIPT_DIR}/variants/${VARIANT}" ]; then
+    echoerr "Variant is unknown... ABORTING!"
+    exit 1
+fi
+source "${SCRIPT_DIR}/variants/${VARIANT}"
+
 # Configuration variables
-BUILD_DIR="${GSL_PROJECT}-build"
+BUILD_DIR="${SRC_DIR}-${VARIANT}"
 
 # Handle option if any
 if [ "$1" == "destroy" ]; then
@@ -45,35 +108,55 @@ if [ "$1" == "destroy" ]; then
     exit 0
 fi
 
-# Create the build directory
+# Create the build directory if needed
 mkdir -p "${BUILD_DIR}"
 cd "${BUILD_DIR}"
 
+# Platform specific tweaks
+
+# Add specific environment to configure
+if [ ! -z "${CPP}" ]; then
+    CONFIGURE+=("CPP='${CPP}'")
+fi
+if [ ! -z "${CC}" ]; then
+    CONFIGURE+=("CC='${CC}'")
+fi
+if [ ! -z "${CXX}" ]; then
+    CONFIGURE+=("CXX='${CXX}'")
+fi
+if [ ! -z "${LD}" ]; then
+    CONFIGURE+=("LD='${LD}'")
+fi
+if [ ! -z "${NM}" ]; then
+    CONFIGURE+=("NM='${NM}'")
+fi
+IFS=' '
+if [[ -v CPPFLAGS[@] ]]; then
+    CONFIGURE+=("CPPFLAGS=${CPPFLAGS[*]}")
+fi
+if [[ -v CFLAGS[@] ]]; then
+    CONFIGURE+=("CFLAGS=${CFLAGS[*]}")
+fi
+if [[ -v CXXFLAGS[@] ]]; then
+    CONFIGURE+=("CXXFLAGS=${CXXFLAGS[*]}")
+fi
+if [[ -v LDFLAGS[@] ]]; then
+    CONFIGURE+=("LDFLAGS=${LDFLAGS[*]}")
+fi
+if [[ -v LIBS[@] ]]; then
+    CONFIGURE+=("LIBS=${LIBS[*]}")
+fi
+
+IFS=''
 # Initial configuration of sources if needed
 if [ ! -e "${BUILD_DIR}/config.status" ]; then
     echo "Configuring ..."
-    ${GSL_PROJECT}/configure --prefix=${HOME}/.local --enable-code-coverage
-fi
-
-ARGNO=0
-if [ -n "$1" ]; then
-    MAKE[${ARGNO}]="$1"
-    ARGNO=$(expr ${ARGNO} + 1)
-else
-    MAKE[${ARGNO}]="all"
-    ARGNO=$(expr ${ARGNO} + 1)
-fi
-
-MAKE[${ARGNO}]='CFLAGS=-g -O0 -Wall'
-ARGNO=$(expr ${ARGNO} + 1)
-
-# Platform specific tweaks
-if [[ $(uname -s) == CYGWIN* ]]; then
-    MAKE[${ARGNO}]="LDFLAGS=${LDFLAGS}${LDFLAGS+ }-no-undefined"
-    ARGNO=$(expr ${ARGNO} + 1)
+    echoquoted "${SRC_DIR}/configure" "${CONFIGURE[@]}"
+    "${SRC_DIR}/configure" "${CONFIGURE[@]}"
 fi
 
 # Make
+echoquoted make "${MAKE[@]}"
 exec make "${MAKE[@]}"
 
 
