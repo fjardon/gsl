@@ -72,7 +72,6 @@ VARIANT_FILE="${SCRIPT_DIR}/.variant"
 
 # Load current variant
 if [ -f "${VARIANT_FILE}" ]; then
-    echo "Loading variant: ${VARIANT_FILE} ..."
     source "${SCRIPT_DIR}/.variant"
 fi
 
@@ -116,19 +115,19 @@ cd "${BUILD_DIR}"
 
 # Add specific environment to configure
 if [ ! -z "${CPP}" ]; then
-    CONFIGURE+=("CPP='${CPP}'")
+    CONFIGURE+=("CPP=${CPP}")
 fi
 if [ ! -z "${CC}" ]; then
-    CONFIGURE+=("CC='${CC}'")
+    CONFIGURE+=("CC=${CC}")
 fi
 if [ ! -z "${CXX}" ]; then
-    CONFIGURE+=("CXX='${CXX}'")
+    CONFIGURE+=("CXX=${CXX}")
 fi
 if [ ! -z "${LD}" ]; then
-    CONFIGURE+=("LD='${LD}'")
+    CONFIGURE+=("LD=${LD}")
 fi
 if [ ! -z "${NM}" ]; then
-    CONFIGURE+=("NM='${NM}'")
+    CONFIGURE+=("NM=${NM}")
 fi
 IFS=' '
 if [[ -v CPPFLAGS[@] ]]; then
