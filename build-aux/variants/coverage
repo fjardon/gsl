@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
+
+# Set prefix for configure
+CONFIGURE+=("--prefix=${HOME}/.local")
+# Enable code coverage
 CONFIGURE+=("--enable-code-coverage")
+
 CFLAGS+=("-g -O0 -Wall -pipe")
 if [[ $(uname -s) == CYGWIN* ]]; then
     LDFLAGS+=("-Wl,--no-undefined")

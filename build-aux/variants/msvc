@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
+
+# Set prefix for configure
+CONFIGURE+=("--prefix=${HOME}/.local/share/msvc")
+# Set host type for configure
+CONFIGURE+=('--host' 'x86_64-pc-mingw32')
+
 CC='cl'
 LD='link'
 NM='dumpbin /HEADER /SYMBOLS'
 CFLAGS+=('/MD')
-CONFIGURE+=('--host' 'x86_64-pc-mingw32')
 

@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Set prefix for configure
+CONFIGURE+=("--prefix=${HOME}/.local")
+
 CFLAGS+=("-g" "-Wall" "-O0" "-pipe")
 if [[ $(uname -s) == CYGWIN* ]]; then
     LDFLAGS+=("-Wl,--no-undefined")
